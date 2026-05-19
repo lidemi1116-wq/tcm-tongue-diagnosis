@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>大米中医 · 舌诊辨证</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=IM+Fell+English:ital@0;1&family=Space+Grotesk:wght@300;400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --pa:#f0ece2;--pa2:#e8e3d5;--pa3:#ddd8c8;
+  --mo:#5a6642;--mo2:#7a8a5a;--mo3:#9aaa7a;--mol:#c8d4a8;--moll:#eaf0d8;--moxl:#f4f7ec;
+  --ik:#2a2620;--ik2:#4a4438;--ik3:#8a8070;
+  --sa:#b8a870;--sal:#e0d4a8;--sall:#f5f0e0;
+  --ru:#7a3828;--cr:#f8f5ee;
+}
+html,body{background:var(--pa);font-family:'Space Grotesk',sans-serif;color:var(--ik);min-height:100vh;overflow-x:hidden;}
+.scr{display:none;min-height:100vh;}
+.scr.act{display:block;}
+
+/* 顶部 */
+.hdr{background:var(--pa2);border-bottom:1px solid var(--pa3);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:flex-end;gap:8px;}
+.logo-cn{font-family:'Noto Serif SC',serif;font-size:18px;font-weight:700;color:var(--mo);letter-spacing:2px;}
+.logo-sub{display:flex;flex-direction:column;justify-content:flex-end;gap:1px;}
+.logo-ast{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;color:var(--mo3);letter-spacing:1px;}
+.logo-en{font-family:'IM Fell English',serif;font-style:italic;font-size:9px;color:var(--mo2);letter-spacing:1.5px;}
+.xp-tag{font-size:11px;color:var(--mo);border:1px solid var(--mol);padding:3px 10px;letter-spacing:1px;}
+
+/* 导航 */
+.nav{display:flex;background:var(--pa2);border-bottom:1px solid var(--pa3);}
+.nbt{flex:1;padding:10px 2px;font-size:11px;font-family:'Noto Serif SC',serif;color:var(--ik3);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;letter-spacing:.3px;}
+.nbt.on{color:var(--mo);border-bottom-color:var(--mo);font-weight:600;}
+.nbt.locked{opacity:.45;cursor:default;border-bottom-color:transparent;}
+
+/* Hero */
+.hero{padding:22px 20px 6px;position:relative;overflow:hidden;background:var(--pa);}
+.hero-ov{font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:var(--ik3);letter-spacing:2px;margin-bottom:6px;}
+.hero-t{font-family:'Noto Serif SC',serif;font-size:26px;font-weight:700;color:var(--ik);line-height:1.2;}
+.hero-t em{color:var(--mo);font-style:normal;}
+.hero-s{font-family:'IM Fell English',serif;font-style:italic;font-size:13px;color:var(--ik3);margin-top:6px;line-height:1.7;}
+.prog-row{display:flex;align-items:center;gap:10px;padding:14px 0 16px;border-top:1px solid var(--pa3);margin-top:16px;}
+.po{flex:1;height:2px;background:var(--pa3);}
+.pi{height:100%;background:var(--mo);transition:width .4s;}
+.pl{font-size:11px;color:var(--ik3);white-space:nowrap;}
+
+/* 区块标题 */
+.sec{padding:16px 20px 8px;display:flex;align-items:baseline;gap:10px;}
+.scn{font-family:'Noto Serif SC',serif;font-size:12px;font-weight:600;color:var(--ik2);letter-spacing:.5px;}
+.sce{font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:var(--ik3);}
+.scr2{flex:1;height:1px;background:var(--pa3);}
+.scpill{font-size:10px;color:var(--mo2);background:var(--moxl);border:1px solid var(--mol);padding:2px 8px;}
+
+/* 模块卡片 */
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px 4px;}
+.mc{background:var(--cr);border:1px solid var(--pa3);padding:14px 12px 12px;cursor:pointer;position:relative;}
+.mc:hover:not(.lk){border-color:var(--mol);}
+.mc.lk{opacity:.5;cursor:default;}
+.mbar{height:2px;background:var(--mo);margin-bottom:10px;}
+.mc.lk .mbar{background:var(--pa3);}
+.mcn{font-family:'Noto Serif SC',serif;font-size:13px;font-weight:600;color:var(--ik);}
+.men{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;color:var(--ik3);margin-top:1px;}
+.mst{margin-top:8px;font-size:10px;}
+.mst.on{color:var(--mo);}
+.mst.off{color:var(--ik3);}
+.mc.unlockable{animation:none;}
+.mc.unlocked{border-color:var(--mol);box-shadow:0 0 0 1px var(--mol);}
+.mc.unlocked .mbar{background:var(--mo2);}
+
+/* 今日练习 */
+.daily{margin:0 20px 4px;background:var(--mo);padding:16px;cursor:pointer;position:relative;overflow:hidden;}
+.dbg{position:absolute;right:-4px;bottom:-8px;font-family:'IM Fell English',serif;font-style:italic;font-size:52px;color:rgba(255,255,255,.07);pointer-events:none;line-height:1;}
+.dcn{font-family:'Noto Serif SC',serif;font-size:14px;font-weight:600;color:#f0ece2;letter-spacing:.5px;}
+.den{font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:var(--mol);margin-top:3px;}
+.dm{font-size:11px;color:var(--mol);margin-top:8px;opacity:.8;}
+.darr{color:var(--mol);font-size:13px;margin-top:8px;}
+
+/* 关卡列表 */
+.lvl{padding:0 20px;display:flex;flex-direction:column;gap:8px;}
+.lvc{background:var(--cr);border:1px solid var(--pa3);padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;position:relative;}
+.lvc:hover:not(.lk){border-color:var(--mol);}
+.lvc.dn{border-color:var(--mol);}
+.lvc.lk{opacity:.42;cursor:default;}
+.lvacc{position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--mo);}
+.lvc.lk .lvacc{background:var(--pa3);}
+.lvc.dn .lvacc{background:var(--mo2);}
+.lvn{width:34px;height:34px;border:1px solid var(--pa3);display:flex;align-items:center;justify-content:center;font-family:'Noto Serif SC',serif;font-size:13px;font-weight:700;color:var(--ik2);flex-shrink:0;}
+.lvc.dn .lvn{border-color:var(--mol);color:var(--mo);}
+.lvcn{font-family:'Noto Serif SC',serif;font-size:13px;font-weight:600;color:var(--ik);}
+.lven{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;color:var(--ik3);margin-top:1px;}
+.lvmt{font-size:11px;color:var(--ik3);margin-top:3px;}
+.lvbg{margin-left:auto;font-size:10px;padding:3px 9px;flex-shrink:0;letter-spacing:.3px;}
+.lvbg.op{color:var(--mo);border:1px solid var(--mol);background:var(--moxl);}
+.lvbg.dn2{color:var(--mo);border:1px solid var(--mol);background:var(--moxl);}
+.lvbg.lk2{color:var(--ik3);border:1px solid var(--pa3);}
+
+/* 速查 */
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px 20px;}
+.rc{background:var(--cr);border:1px solid var(--pa3);padding:14px 12px;cursor:pointer;}
+.rc:hover{border-color:var(--mol);}
+.rdec{font-family:'IM Fell English',serif;font-size:18px;color:var(--mo3);line-height:1;opacity:.5;}
+.rcn{font-family:'Noto Serif SC',serif;font-size:12px;font-weight:600;color:var(--ik);margin-top:4px;line-height:1.4;}
+.rtag{display:inline-block;font-size:10px;color:var(--mo);background:var(--moxl);border:1px solid var(--mol);padding:2px 7px;margin-top:6px;}
+
+/* ============ 答题页面 ============ */
+.lhdr{background:var(--pa2);border-bottom:1px solid var(--pa3);padding:10px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;}
+.bkbt{background:none;border:1px solid var(--pa3);padding:5px 10px;font-size:11px;cursor:pointer;color:var(--ik2);letter-spacing:.5px;}
+.ltit{font-family:'Noto Serif SC',serif;font-size:12px;font-weight:600;color:var(--ik2);letter-spacing:.5px;}
+.qpct{margin-left:auto;font-size:11px;color:var(--ik3);}
+.pstrip{height:2px;background:var(--pa3);}
+.psfill{height:100%;background:var(--mo);transition:width .3s;}
+
+/* 舌象图例区域（答题页用，显示题目图例） */
+.tongue-area{margin:14px 20px 0;}
+.tongue-ifrm{
+  background:var(--pa2);border:1px solid var(--pa3);
+  position:relative;min-height:140px;
+  display:flex;justify-content:center;align-items:center;
+}
+.tongue-ifrm .tfc{display:flex;justify-content:center;align-items:center;min-height:140px;}
+.tongue-ifrm .tfc svg{opacity:.7;}
+.tongue-ifrm .icn{position:absolute;top:7px;left:12px;font-family:'Noto Serif SC',serif;font-size:11px;color:var(--ik3);}
+.tongue-ifrm .ien{position:absolute;bottom:7px;right:12px;font-family:'IM Fell English',serif;font-style:italic;font-size:10px;color:var(--ik3);}
+
+/* 题目 */
+.strow{padding:10px 20px;display:flex;align-items:center;gap:8px;}
+.stlbl{font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:var(--ik3);}
+.pips{display:flex;gap:5px;}
+.pp{width:7px;height:7px;border-radius:50%;background:var(--pa3);}
+.pp.on{background:var(--mo);}
+.qwrap{padding:0 20px;}
+.qtxt{font-family:'Noto Serif SC',serif;font-size:15px;line-height:1.7;color:var(--ik);margin-bottom:14px;}
+.opts{display:flex;flex-direction:column;gap:7px;}
+.obt{background:var(--cr);border:1px solid var(--pa3);padding:11px 14px;text-align:left;font-size:12px;font-family:'Noto Serif SC',serif;cursor:pointer;display:flex;align-items:flex-start;gap:10px;transition:all .15s;line-height:1.55;}
+.obt:hover:not(.ds){background:var(--moxl);border-color:var(--mol);}
+.okey{width:19px;height:19px;border:1px solid var(--pa3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--ik3);flex-shrink:0;margin-top:1px;}
+.obt.ok{background:var(--moxl);border-color:var(--mol);}
+.obt.ok .okey{background:var(--mo);border-color:var(--mo);color:#fff;}
+.obt.er{background:#f5ece8;border-color:#c09080;}
+.obt.er .okey{background:var(--ru);border-color:var(--ru);color:#fff;}
+.obt.ds{cursor:default;}
+
+/* 知识卡 */
+.kcd{margin:14px 20px 0;background:var(--cr);border:1px solid var(--pa3);display:none;}
+.kcd.sh{display:block;}
+.kchdr{background:var(--pa2);padding:8px 14px;border-bottom:1px solid var(--pa3);display:flex;align-items:center;gap:6px;}
+.kchn{font-family:'Noto Serif SC',serif;font-size:11px;font-weight:600;color:var(--ik2);}
+.kche{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;color:var(--ik3);}
+.kcrs{padding:10px 14px 0;display:flex;align-items:center;gap:8px;}
+.kcic{font-size:14px;}
+.kcrt{font-family:'Noto Serif SC',serif;font-size:13px;font-weight:600;}
+.kcrt.ok{color:var(--mo);}
+.kcrt.er{color:var(--ru);}
+.kcbd{padding:10px 14px 14px;}
+.kcan{background:var(--sall);border-left:2px solid var(--sa);padding:8px 12px;margin-bottom:8px;font-size:12px;line-height:1.7;color:var(--ik2);}
+.kcatg{display:block;font-family:'IM Fell English',serif;font-style:italic;font-size:10px;color:var(--sa);margin-bottom:3px;letter-spacing:.5px;}
+.kcex{font-size:12px;color:var(--ik3);line-height:1.7;}
+
+/* 底部按钮 */
+.nxtbt{display:block;width:calc(100% - 40px);margin:14px 20px 20px;background:var(--mo);color:#f0ece2;border:none;padding:13px;font-family:'Noto Serif SC',serif;font-size:14px;font-weight:600;cursor:pointer;letter-spacing:.5px;}
+.nxtbt:disabled{background:var(--pa3);color:var(--ik3);cursor:default;}
+
+/* ============ 完成页 ============ */
+.cmhdr{background:var(--pa2);border-bottom:1px solid var(--pa3);padding:20px;text-align:center;}
+.cmen{font-family:'IM Fell English',serif;font-style:italic;font-size:22px;color:var(--mo);}
+.cmcn{font-family:'Noto Serif SC',serif;font-size:11px;color:var(--ik3);margin-top:3px;letter-spacing:2px;}
+.cmbd{padding:20px;}
+.strs{display:flex;justify-content:center;gap:10px;margin-bottom:18px;}
+.stbx{width:46px;height:46px;border:1px solid var(--pa3);display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--cr);}
+.stbx.lt{border-color:var(--sa);background:var(--sall);}
+.sgrd{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.stb{background:var(--pa2);border:1px solid var(--pa3);padding:12px 8px;text-align:center;}
+.stn{font-family:'IM Fell English',serif;font-size:24px;color:var(--mo);}
+.stlb{font-size:10px;color:var(--ik3);letter-spacing:.5px;margin-top:2px;}
+.trps{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:16px;}
+.trp{background:var(--pa2);border:1px solid var(--pa3);padding:4px 10px;font-size:11px;color:var(--ik2);font-family:'Noto Serif SC',serif;}
+
+.hmbt{width:100%;background:var(--ik);color:var(--pa);border:none;padding:13px;font-family:'Noto Serif SC',serif;font-size:14px;font-weight:600;cursor:pointer;letter-spacing:.5px;margin-bottom:8px;}
+.rtbt{width:100%;background:none;border:1px solid var(--pa3);padding:11px;font-family:'Noto Serif SC',serif;font-size:13px;cursor:pointer;color:var(--ik2);}
+
+/* 报告图区域 */
+.report-section{padding:16px 0;}
+.report-canvas-wrap{display:flex;justify-content:center;margin-bottom:12px;}
+#reportCanvas{width:100%;max-width:360px;border-radius:8px;box-shadow:0 2px 12px rgba(42,38,32,.15);}
+.shbtn{display:block;width:100%;background:none;border:1px solid var(--pa3);padding:11px;font-family:'Noto Serif SC',serif;font-size:13px;cursor:pointer;color:var(--ik2);margin-bottom:8px;}
+.shbtn:hover{border-color:var(--mol);background:var(--moxl);}
+.shbtn.primary{background:var(--mo);color:#f0ece2;border-color:var(--mo);}
+.shbtn.primary:hover{background:#4a5638;}
+
+/* ============ 弹窗 ============ */
+.popup-overlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(42,38,32,0.55);
+  z-index:999;display:none;align-items:center;justify-content:center;
+  padding:20px;
+}
+.popup-overlay.show{display:flex;}
+.popup-card{
+  background:var(--cr);border-radius:16px;width:100%;max-width:380px;
+  overflow:hidden;animation:fadeUp .3s ease;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.popup-top{
+  background:linear-gradient(135deg,var(--mo),var(--mo2));
+  padding:24px 20px 20px;text-align:center;
+}
+.popup-emoji{font-size:42px;margin-bottom:10px;}
+.popup-title{font-family:'Noto Serif SC',serif;font-size:20px;font-weight:700;color:#f0ece2;letter-spacing:1px;}
+.popup-sub{font-family:'IM Fell English',serif;font-style:italic;font-size:13px;color:var(--mol);margin-top:4px;}
+.popup-mid{padding:20px;text-align:center;}
+.popup-desc{font-family:'Noto Serif SC',serif;font-size:14px;color:var(--ik2);line-height:1.8;margin-bottom:16px;}
+.popup-wx{
+  background:var(--moxl);border:1px solid var(--mol);
+  padding:14px 20px;display:inline-flex;align-items:center;gap:10px;
+  border-radius:8px;margin-bottom:16px;
+}
+.popup-wx-label{font-size:11px;color:var(--ik3);font-family:'Space Grotesk',sans-serif;}
+.popup-wx-id{font-family:'Noto Serif SC',serif;font-size:18px;font-weight:700;color:var(--mo);letter-spacing:1px;}
+.popup-wx-copy{
+  background:var(--mo);color:#f0ece2;border:none;
+  padding:5px 12px;font-size:12px;cursor:pointer;
+  font-family:'Space Grotesk',sans-serif;border-radius:4px;
+}
+.popup-wx-copy:hover{background:#4a5638;}
+.popup-tip{font-size:12px;color:var(--ik3);line-height:1.7;}
+.popup-btm{padding:0 20px 20px;display:flex;flex-direction:column;gap:8px;}
+.popup-btn1{
+  width:100%;background:var(--mo);color:#f0ece2;border:none;
+  padding:13px;font-family:'Noto Serif SC',serif;font-size:14px;font-weight:600;
+  cursor:pointer;border-radius:8px;letter-spacing:.5px;
+}
+.popup-btn2{
+  width:100%;background:none;color:var(--ik2);border:1px solid var(--pa3);
+  padding:11px;font-family:'Noto Serif SC',serif;font-size:13px;
+  cursor:pointer;border-radius:8px;
+}
+
+/* ============ 我的舌诊页 ============ */
+.mine-hero{
+  padding:20px;background:linear-gradient(160deg,var(--mo) 0%,var(--mo2) 100%);
+  text-align:center;position:relative;overflow:hidden;
+}
+.mine-hero .dbg{color:rgba(255,255,255,.06);}
+.mine-emoji{font-size:36px;margin-bottom:8px;}
+.mine-title{font-family:'Noto Serif SC',serif;font-size:22px;font-weight:700;color:#f0ece2;}
+.mine-sub{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;color:var(--mol);margin-top:4px;}
+.mine-upload-wrap{
+  margin:16px 20px;
+}
+.mine-upload{
+  width:100%;aspect-ratio:1.2;max-height:240px;
+  background:var(--pa2);border:2px dashed var(--mol);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;position:relative;overflow:hidden;
+}
+.mine-upload:hover{border-color:var(--mo2);}
+.mine-upload.has-photo{border-style:solid;}
+.mine-upload .uicon{font-size:36px;margin-bottom:8px;opacity:.4;}
+.mine-upload .utxt{font-family:'Noto Serif SC',serif;font-size:13px;color:var(--ik2);}
+.mine-upload .utxt2{font-size:11px;color:var(--ik3);margin-top:4px;opacity:.7;}
+#mine-preview{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;background:#faf7f2;display:none;}
+.mine-upload.has-photo #mine-preview{display:block;}
+.mine-upload.has-photo .uoverlay2{display:flex;}
+.uoverlay2{
+  position:absolute;bottom:0;left:0;right:0;
+  background:rgba(42,38,32,0.6);
+  padding:8px 14px;display:none;align-items:center;justify-content:space-between;
+}
+#mine-start{
+  display:block;width:calc(100% - 40px);margin:16px 20px;
+  background:var(--mo);color:#f0ece2;border:none;padding:14px;
+  font-family:'Noto Serif SC',serif;font-size:15px;font-weight:600;
+  cursor:pointer;letter-spacing:.5px;border-radius:4px;
+}
+#mine-start:disabled{background:var(--pa3);color:var(--ik3);cursor:default;}
+#mine-start:active:not(:disabled){background:#4a5638;}
+
+.mine-qs{margin:0 20px;}
+.mine-q{
+  background:var(--cr);border:1px solid var(--pa3);
+  padding:14px;margin-bottom:10px;
+}
+.mine-q-num{
+  font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:var(--mo3);margin-bottom:6px;
+}
+.mine-q-txt{font-family:'Noto Serif SC',serif;font-size:14px;color:var(--ik);line-height:1.6;margin-bottom:10px;}
+.mine-q-opts{display:flex;flex-direction:column;gap:6px;}
+.mine-q-btn{
+  background:var(--pa);border:1px solid var(--pa3);
+  padding:9px 12px;text-align:left;font-size:12px;
+  font-family:'Noto Serif SC',serif;cursor:pointer;
+  display:flex;align-items:center;gap:8px;
+}
+.mine-q-btn:hover{background:var(--moxl);border-color:var(--mol);}
+.mine-q-btn.sel{background:var(--moxl);border-color:var(--mol);}
+.mine-q-btn .qdot{width:16px;height:16px;border:1px solid var(--pa3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--ik3);flex-shrink:0;}
+.mine-q-btn.sel .qdot{background:var(--mo);border-color:var(--mo);color:#fff;}
+.mine-q-btn .qlbl{flex:1;}
+.mine-q-btn .qscore{font-size:11px;color:var(--mo3);margin-left:auto;}
+
+/* 隐私提示 */
+.priv-hint{
+  text-align:center;padding:12px 20px;font-size:10px;color:var(--ik3);
+  font-family:'Space Grotesk',sans-serif;
+}
+.pad{bottom:0;height:80px;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.fade-up{animation:fadeUp .3s ease forwards;}
+</style>
+</head>
+<body>
+
+<!-- 页面0：首页 -->
+<div id="s0" class="scr act">
+  <div class="hdr">
+    <div class="logo">
+      <div class="logo-cn">大米</div>
+      <div class="logo-sub">
+        <div class="logo-ast">* pure as natural</div>
+        <div class="logo-en">DA MI · HEALTH</div>
+      </div>
+    </div>
+    <div class="xp-tag" id="xpd">0 XP</div>
+  </div>
+  <div class="nav">
+    <button class="nbt on" onclick="stab(this,'t0')">学习地图</button>
+    <button class="nbt" onclick="stab(this,'t1')">舌诊</button>
+    <button class="nbt" onclick="stab(this,'t2')">面诊</button>
+    <button class="nbt" onclick="stab(this,'t3')">速查</button>
+    <button class="nbt" id="mineNavBtn" onclick="goMine()">我的舌诊</button>
+  </div>
+
+  <div id="t0">
+    <div class="hero">
+      <svg style="position:absolute;right:0;top:0;opacity:.11;pointer-events:none" width="110" height="170" viewBox="0 0 110 170"><path d="M55 170 C55 130 50 110 46 82 C42 54 28 36 18 8" fill="none" stroke="#5a6642" stroke-width="1"/><path d="M46 82 C56 72 70 68 86 64" fill="none" stroke="#5a6642" stroke-width=".7"/><path d="M50 112 C62 104 76 100 90 104" fill="none" stroke="#5a6642" stroke-width=".6"/><circle cx="18" cy="8" r="2" fill="#5a6642" opacity=".5"/><circle cx="86" cy="64" r="1.5" fill="#5a6642" opacity=".4"/><circle cx="90" cy="104" r="1.5" fill="#5a6642" opacity=".35"/></svg>
+      <div class="hero-ov">* 养于身 · 安于心</div>
+      <div class="hero-t">观舌<em>识面</em><br>中医入门</div>
+      <div class="hero-s">Pure as natural — 舌诊 · 面诊 · 经络 · 体质</div>
+      <div class="prog-row">
+        <div class="po"><div class="pi" id="gp" style="width:8%"></div></div>
+        <div class="pl" id="gpl">1 / 12 关</div>
+      </div>
+    </div>
+    <div class="sec"><div class="scn">四大学习模块</div><div class="sce">core modules</div><div class="scr2"></div></div>
+    <div class="mgrid">
+      <div class="mc" onclick="otab('t1')"><div class="mbar"></div><svg width="40" height="32" viewBox="0 0 40 32" style="display:block;margin-bottom:8px"><ellipse cx="20" cy="20" rx="14" ry="10" fill="#5a6642" opacity=".22"/><ellipse cx="20" cy="17" rx="10" ry="7" fill="#5a6642" opacity=".15"/><path d="M8 13 Q20 4 32 13" fill="none" stroke="#5a6642" stroke-width=".9" opacity=".4"/></svg><div class="mcn">舌诊</div><div class="men">tongue diagnosis</div><div class="mst on">进行中 · 4关</div></div>
+      <div class="mc" onclick="otab('t2')"><div class="mbar"></div><svg width="40" height="32" viewBox="0 0 40 32" style="display:block;margin-bottom:8px"><ellipse cx="20" cy="18" rx="14" ry="12" fill="#5a6642" opacity=".2"/><ellipse cx="13" cy="15" rx="3" ry="2" fill="#2a2620" opacity=".3"/><ellipse cx="27" cy="15" rx="3" ry="2" fill="#2a2620" opacity=".3"/><path d="M13 23 Q20 27 27 23" fill="none" stroke="#7a3828" stroke-width="1"/></svg><div class="mcn">面诊</div><div class="men">face diagnosis</div><div class="mst on">开放 · 3关</div></div>
+      <div class="mc lk"><div class="mbar"></div><svg width="40" height="32" viewBox="0 0 40 32" style="display:block;margin-bottom:8px"><path d="M6 20 Q14 8 20 16 Q26 24 34 12" fill="none" stroke="#5a6642" stroke-width=".9" opacity=".3"/></svg><div class="mcn">经络穴位</div><div class="men">meridians</div><div class="mst off">— 解锁中</div></div>
+      <div class="mc lk" id="mineCard"><div class="mbar"></div><svg width="40" height="32" viewBox="0 0 40 32" style="display:block;margin-bottom:8px"><circle cx="20" cy="16" r="10" fill="none" stroke="#5a6642" stroke-width=".8" opacity=".4"/><path d="M12 20 Q20 26 28 20" fill="none" stroke="#5a6642" stroke-width=".8"/></svg><div class="mcn">我的舌诊</div><div class="men">personal diagnosis</div><div class="mst off" id="mineCardSt">— 闯关解锁</div></div>
+    </div>
+    <div class="sec" style="margin-top:8px;"><div class="scn">今日练习</div><div class="sce">daily drill</div><div class="scr2"></div><div class="scpill">5题</div></div>
+    <div class="daily" onclick="go(99)">
+      <div class="dbg">daily</div>
+      <div class="dcn">每日刷题 · 综合练习</div>
+      <div class="den">* having temperature makes it healthier</div>
+      <div class="dm">随机出题 · 防遗忘强化</div>
+      <div class="darr">→ 开始练习</div>
+    </div>
+    <div style="height:20px"></div>
+  </div>
+
+  <div id="t1" style="display:none">
+    <div class="hero" style="padding-bottom:16px;">
+      <div class="hero-ov">* Chapter 01</div>
+      <div class="hero-t" style="font-size:24px;">观舌<em>辨证</em></div>
+      <div class="hero-s">tongue diagnosis · 从舌色到综合辨证</div>
+      <div style="height:10px"></div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="lvl" id="tlv">
+      <div class="lvc" onclick="go(1)" id="lc1"><div class="lvacc"></div><div class="lvn" id="ln1">一</div><div><div class="lvcn">舌色辨证</div><div class="lven">tongue color</div><div class="lvmt">6题 · 淡白 红 绛 紫暗</div></div><div class="lvbg op" id="lb1">开始</div></div>
+      <div class="lvc" onclick="go(2)" id="lc2"><div class="lvacc"></div><div class="lvn" id="ln2">二</div><div><div class="lvcn">舌苔辨证</div><div class="lven">tongue coat</div><div class="lvmt">5题 · 白苔 黄苔 厚苔 无苔</div></div><div class="lvbg op" id="lb2">开始</div></div>
+      <div class="lvc lk" id="lc3"><div class="lvacc"></div><div class="lvn" id="ln3">三</div><div><div class="lvcn">舌形舌态</div><div class="lven">shape and motion</div><div class="lvmt">4题 · 胖大 齿痕 裂纹</div></div><div class="lvbg lk2" id="lb3">— 锁定</div></div>
+      <div class="lvc lk" id="lc4"><div class="lvacc"></div><div class="lvn" id="ln4">四</div><div><div class="lvcn">综合辨证挑战</div><div class="lven">comprehensive</div><div class="lvmt">8题 · 混合舌象分析</div></div><div class="lvbg lk2" id="lb4">— 锁定</div></div>
+    </div>
+    <div style="height:16px"></div>
+  </div>
+
+  <div id="t2" style="display:none">
+    <div class="hero" style="padding-bottom:16px;">
+      <div class="hero-ov">* Chapter 02</div>
+      <div class="hero-t" style="font-size:24px;">望色<em>察神</em></div>
+      <div class="hero-s">face diagnosis · 五色主病 · 分区望诊</div>
+      <div style="height:10px"></div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="lvl">
+      <div class="lvc" onclick="go(10)"><div class="lvacc"></div><div class="lvn">一</div><div><div class="lvcn">五色主病</div><div class="lven">five colors</div><div class="lvmt">5题 · 青赤黄白黑</div></div><div class="lvbg op">开始</div></div>
+      <div class="lvc lk"><div class="lvacc"></div><div class="lvn">二</div><div><div class="lvcn">面部分区望诊</div><div class="lven">face zones</div><div class="lvmt">5题 · 额鼻颊口周下颌</div></div><div class="lvbg lk2">— 锁定</div></div>
+      <div class="lvc lk"><div class="lvacc"></div><div class="lvn">三</div><div><div class="lvcn">气色综合判断</div><div class="lven">complexion</div><div class="lvmt">6题 · 晦荣泽枯</div></div><div class="lvbg lk2">— 锁定</div></div>
+    </div>
+    <div style="height:16px"></div>
+  </div>
+
+  <div id="t3" style="display:none">
+    <div style="height:12px"></div>
+    <div class="sec"><div class="scn">知识速查</div><div class="sce">quick reference</div><div class="scr2"></div></div>
+    <div class="rgrid">
+      <div class="rc" onclick="showRef('舌色')"><div class="rdec">*</div><div class="rcn">舌色证型速查</div><div class="rtag">舌诊</div></div>
+      <div class="rc" onclick="showRef('面色')"><div class="rdec">*</div><div class="rcn">面色五色主病</div><div class="rtag">面诊</div></div>
+      <div class="rc" onclick="showRef('体质')"><div class="rdec">*</div><div class="rcn">九种体质辨识</div><div class="rtag">体质</div></div>
+      <div class="rc" onclick="showRef('穴位')"><div class="rdec">*</div><div class="rcn">日常保健穴位</div><div class="rtag">经络</div></div>
+      <div class="rc" onclick="showRef('脾虚')"><div class="rdec">*</div><div class="rcn">脾虚食养指南</div><div class="rtag">食养</div></div>
+      <div class="rc" onclick="showRef('注意事项')"><div class="rdec">*</div><div class="rcn">望诊注意事项</div><div class="rtag">实践</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 页面1：答题 -->
+<div id="s1" class="scr">
+  <div class="lhdr">
+    <button class="bkbt" onclick="gh()">← 返回</button>
+    <div class="ltit" id="ltit">舌色辨证</div>
+    <div class="qpct" id="qpct">1 / 6</div>
+  </div>
+  <div class="pstrip"><div class="psfill" id="lp" style="width:16%"></div></div>
+  <div class="strow">
+    <div class="stlbl">* streak 连击</div>
+    <div class="pips" id="pips">
+      <div class="pp" id="p0"></div><div class="pp" id="p1"></div><div class="pp" id="p2"></div>
+      <div class="pp" id="p3"></div><div class="pp" id="p4"></div>
+    </div>
+  </div>
+
+  <!-- 舌象图例区域：显示题目对应的舌象图，不上传 -->
+  <div class="tongue-area" id="tongueArea">
+    <div class="tongue-ifrm">
+      <div class="icn" id="tcn">舌象</div>
+      <div class="tfc" id="tongueFrame"></div>
+      <div class="ien" id="ten">tongue</div>
+    </div>
+  </div>
+
+  <div class="qwrap">
+    <div class="qtxt" id="qtxt"></div>
+    <div class="opts" id="opts"></div>
+  </div>
+  <div class="kcd" id="kcd">
+    <div class="kchdr"><span class="kchn">知识点</span><span class="kche" style="margin-left:6px">knowledge card</span></div>
+    <div class="kcrs"><span class="kcic" id="kico">*</span><span class="kcrt" id="krt"></span></div>
+    <div class="kcbd">
+      <div class="kcan"><span class="kcatg">* 具象比喻 analogy</span><span id="kana"></span></div>
+      <div class="kcex" id="kex"></div>
+    </div>
+  </div>
+  <button class="nxtbt" id="nxtbt" onclick="nq()" style="display:none">下一题 →</button>
+  <div style="height:20px"></div>
+</div>
+
+<!-- 隐藏的file input -->
+<input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(this)">
+
+<!-- 页面2：学习关卡完成 -->
+<div id="s2" class="scr">
+  <div class="lhdr">
+    <button class="bkbt" onclick="gh()">← 返回</button>
+    <div class="ltit" id="cmtit">完成</div>
+    <div class="qpct" id="cmtime"></div>
+  </div>
+  <div class="cmhdr">
+    <div class="cmen">* level complete</div>
+    <div class="cmcn" id="cmcn">舌色辨证 · 完成</div>
+  </div>
+  <div class="cmbd">
+    <div class="strs"><div class="stbx" id="s1b">★</div><div class="stbx" id="s2b">★</div><div class="stbx" id="s3b">★</div></div>
+    <div class="sgrd">
+      <div class="stb"><div class="stn" id="sco">5/6</div><div class="stlb">答对</div></div>
+      <div class="stb"><div class="stn" id="sxp">72</div><div class="stlb">XP</div></div>
+      <div class="stb"><div class="stn" id="sst">3</div><div class="stlb">连击</div></div>
+    </div>
+    <div class="trps" id="trps"></div>
+    <button class="hmbt" onclick="gh()">返回学习地图</button>
+    <button class="rtbt" onclick="rl()">再刷一遍 · retry</button>
+  </div>
+  <div class="priv-hint">报告图仅本地生成，不会上传至任何服务器</div>
+</div>
+
+<!-- 页面3：我的舌诊 -->
+<div id="s3" class="scr">
+  <div class="lhdr">
+    <button class="bkbt" onclick="gh()">← 返回</button>
+    <div class="ltit">我的舌诊</div>
+    <div class="qpct" id="mineProg"></div>
+  </div>
+  <div class="mine-hero">
+    <div class="dbg">* mine</div>
+    <div class="mine-emoji">👅</div>
+    <div class="mine-title">舌诊辨证</div>
+    <div class="mine-sub">* personal tongue diagnosis</div>
+  </div>
+
+  <!-- 上传舌照 -->
+  <div class="mine-upload-wrap" id="mineUploadWrap">
+    <div class="mine-upload" id="mineUpload" onclick="document.getElementById('minePhotoInput').click()">
+      <div class="uicon">📷</div>
+      <div class="utxt">上传自己的舌象照片</div>
+      <div class="utxt2">光线充足、舌头自然伸出</div>
+      <img id="mine-preview" src="" alt="">
+      <div class="uoverlay2">
+        <span class="utag">舌象已上传</span>
+        <button class="uchbtn" onclick="event.stopPropagation();clearMinePhoto()">清除</button>
+      </div>
+    </div>
+    <button id="mine-start" onclick="startMineTest()" disabled>开始辨证 →</button>
+  </div>
+
+  <!-- 辨证问卷 -->
+  <div class="mine-qs" id="mineQs" style="display:none;"></div>
+</div>
+
+<!-- 页面4：我的舌诊完成 -->
+<div id="s4" class="scr">
+  <div class="lhdr">
+    <button class="bkbt" onclick="gh()">← 返回</button>
+    <div class="ltit">辨证报告</div>
+  </div>
+  <div class="cmhdr" style="background:linear-gradient(135deg,var(--mo),var(--mo2));">
+    <div class="cmen" style="color:#f0ece2;">* diagnosis report</div>
+    <div class="cmcn" style="color:var(--mol);" id="mineReportTime"></div>
+  </div>
+  <div class="cmbd">
+    <div class="sgrd" style="margin-bottom:16px;">
+      <div class="stb"><div class="stn" id="mineScore">--</div><div class="stlb">综合评分</div></div>
+      <div class="stb"><div class="stn" id="mineType">--</div><div class="stlb">证型</div></div>
+      <div class="stb"><div class="stn" id="mineRisk">--</div><div class="stlb">风险</div></div>
+    </div>
+
+    <!-- 舌照预览 -->
+    <div id="minePhotoArea" style="display:none;margin-bottom:14px;">
+      <div style="background:var(--pa2);border:1px solid var(--pa3);padding:8px;">
+        <img id="mineReportPhoto" src="" style="width:100%;max-height:180px;object-fit:contain;background:#faf7f2;">
+      </div>
+    </div>
+
+    <div id="mineResultArea"></div>
+
+    <div class="report-section" style="padding-top:8px;">
+      <button class="shbtn primary" onclick="downloadMineReport()">↓ 保存报告图到相册</button>
+    </div>
+
+    <button class="hmbt" onclick="gh()">返回学习地图</button>
+  </div>
+  <div class="priv-hint">报告图仅本地生成，不会上传至任何服务器</div>
+</div>
+
+<!-- 速查面板 -->
+<div class="ref-overlay" id="refOverlay" onclick="if(event.target===this)closeRef()"></div>
+<div class="ref-panel" id="refPanel">
+  <div class="ref-handle"></div>
+  <div class="ref-hdr">
+    <div class="ref-ttl" id="refTitle">舌色速查</div>
+    <button class="ref-cls" onclick="closeRef()">关闭</button>
+  </div>
+  <div class="ref-body" id="refBody"></div>
+</div>
+
+<!-- 领取报告弹窗 -->
+<div class="popup-overlay" id="reportPopup">
+  <div class="popup-card">
+    <div class="popup-top">
+      <div class="popup-emoji">🎉</div>
+      <div class="popup-title">初步报告已生成</div>
+      <div class="popup-sub">* preliminary report ready</div>
+    </div>
+    <div class="popup-mid">
+      <div class="popup-desc">
+        已为你生成舌诊初步报告<br>
+        添加下方微信，发送「舌诊报告」<br>
+        大米老师为你领取<strong>专属详细分析</strong>
+      </div>
+      <div class="popup-wx">
+        <div>
+          <div class="popup-wx-label">微信</div>
+          <div class="popup-wx-id">Demi714831</div>
+        </div>
+        <button class="popup-wx-copy" onclick="copyWx()">复制</button>
+      </div>
+      <div class="popup-tip">
+        📌 长按上方微信号复制<br>
+        📌 发送「舌诊报告」领取专属PDF
+      </div>
+    </div>
+    <div class="popup-btm">
+      <button class="popup-btn1" onclick="closePopup()">我知道了</button>
+    </div>
+  </div>
+</div>
+
+<!-- 速查面板样式 -->
+<style>
+.ref-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(42,38,32,.5);z-index:500;display:none;}
+.ref-overlay.show{display:block;}
+.ref-panel{position:fixed;bottom:0;left:0;right:0;max-height:85vh;background:var(--cr);border-radius:16px 16px 0 0;z-index:501;transform:translateY(100%);transition:transform .3s ease;overflow:hidden;}
+.ref-panel.show{transform:translateY(0);}
+.ref-handle{width:40px;height:4px;background:var(--pa3);border-radius:2px;margin:10px auto;}
+.ref-hdr{padding:10px 16px 0;border-bottom:1px solid var(--pa3);display:flex;align-items:center;gap:10px;}
+.ref-ttl{font-family:'Noto Serif SC',serif;font-size:14px;font-weight:600;color:var(--ik2);flex:1;}
+.ref-cls{background:none;border:1px solid var(--pa3);padding:4px 10px;font-size:11px;cursor:pointer;color:var(--ik2);}
+.ref-body{padding:14px 16px;overflow-y:auto;max-height:calc(85vh - 60px);}
+.ref-section{margin-bottom:16px;}
+.ref-section-tit{font-family:'Noto Serif SC',serif;font-size:12px;font-weight:600;color:var(--mo);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--pa3);}
+.ref-item{background:var(--pa);border:1px solid var(--pa3);padding:10px 12px;margin-bottom:6px;}
+.ref-item-q{font-family:'Noto Serif SC',serif;font-size:12px;font-weight:600;color:var(--ik);margin-bottom:4px;}
+.ref-item-a{font-size:11px;color:var(--ik3);line-height:1.7;}
+</style>
+
+<script>
+// ====== 舌象图库 ======
+const TV={
+  normal:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="72" rx="37" ry="49" fill="#a07868" opacity=".7"/><ellipse cx="70" cy="60" rx="27" ry="31" fill="#906858" opacity=".3"/><path d="M53 40 Q70 21 87 40" fill="none" stroke="#806050" stroke-width="1.5" opacity=".35"/></svg>',
+  pale:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="72" rx="37" ry="49" fill="#ddd0c8"/><ellipse cx="70" cy="60" rx="27" ry="31" fill="#cdc0b8" opacity=".4"/></svg>',
+  red:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="72" rx="37" ry="49" fill="#903030"/><circle cx="58" cy="52" r="2.5" fill="#501010"/><circle cx="70" cy="46" r="2.5" fill="#501010"/><circle cx="82" cy="52" r="2.5" fill="#501010"/><circle cx="64" cy="60" r="2" fill="#501010"/></svg>',
+  crimson:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="72" rx="37" ry="49" fill="#681540"/></svg>',
+  purple:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="72" rx="37" ry="49" fill="#3e3460"/></svg>',
+  white_coat:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="72" rx="37" ry="49" fill="#a07868" opacity=".7"/><ellipse cx="70" cy="72" rx="33" ry="45" fill="#ede8e0" opacity=".9"/></svg>',
+  yellow_coat:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="72" rx="37" ry="49" fill="#a07868" opacity=".7"/><ellipse cx="70" cy="72" rx="33" ry="45" fill="#b89028" opacity=".78"/></svg>',
+  thick_coat:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="72" rx="37" ry="49" fill="#a07868"/><ellipse cx="70" cy="72" rx="33" ry="45" fill="#e0dcd0" opacity=".92"/><rect x="50" y="56" width="5" height="2.5" rx="1" fill="#c0b8a0" opacity=".7"/><rect x="62" y="52" width="5" height="2.5" rx="1" fill="#c0b8a0" opacity=".7"/><rect x="74" y="56" width="5" height="2.5" rx="1" fill="#c0b8a0" opacity=".7"/></svg>',
+  no_coat:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="72" rx="37" ry="49" fill="#681540"/></svg>',
+  face:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="68" rx="40" ry="48" fill="#c8a070" opacity=".6"/><ellipse cx="54" cy="52" rx="5" ry="2.5" fill="#3a3020" opacity=".55"/><ellipse cx="86" cy="52" rx="5" ry="2.5" fill="#3a3020" opacity=".55"/><path d="M60 82 Q70 90 80 82" fill="none" stroke="#8a5030" stroke-width="1.8"/></svg>'
+};
+
+// ====== 题库 ======
+const DB={
+  1:{t:'舌色辨证',q:[
+    {k:'normal',cn:'淡红舌',en:'Normal Tongue',q:'这是一条淡红舌，代表什么状态？',o:['气血调和，属正常健康','气血不足，阳气虚衰','热邪入里，炎热内盛','血脉瘀阻，运行不畅'],a:0,ana:'就像水龙头出水量刚好：不是细细的涓流，也不是喷涌的热水，水温正常、水量充足。',ex:'淡红舌是气血充足、阴阳平衡的表现，是健康的基准舌象。'},
+    {k:'pale',cn:'淡白舌',en:'Pale Tongue',q:'这条舌头颜色比正常偏淡，几乎接近白色，称为——',o:['红舌','淡白舌','绛舌','青紫舌'],a:1,ana:'想象一盆植物因缺水缺光，叶子褪成浅黄绿色。淡白舌就是身体营养供应不足的表现。',ex:'淡白舌主气血两虚或阳虚寒证，血液不能充分充盈舌体。'},
+    {k:'red',cn:'红舌（芒刺）',en:'Red Tongue',q:'舌鲜红且舌面有小颗粒凸起（芒刺），提示什么？',o:['气血不足，需要补益','热邪亢盛，内热炽烈','寒湿内困，脾阳受损','肾精亏虚，髓海不足'],a:1,ana:'就像一锅快沸腾的水，热气顶起锅盖冒泡——芒刺就是热气顶起舌乳头的具象表现。',ex:'舌尖芒刺→心火旺；舌边芒刺→肝胆热盛；越热芒刺越多。'},
+    {k:'crimson',cn:'绛舌',en:'Crimson Tongue',q:'绛舌（深红偏暗紫）比红舌热象更重，常见于哪种情况？',o:['普通外感风寒初起','温病热邪入营血或阴虚火旺','食积停滞，胃气不和','痰湿困脾，运化失常'],a:1,ana:'红舌是门口着火，绛舌是火已经烧进了房间深处（营血层）。越深颜色越暗。',ex:'绛舌是热入营血的标志，提示病已深入；也见于阴虚火旺慢性损耗。'},
+    {k:'purple',cn:'紫暗舌',en:'Purple Tongue',q:'紫暗舌（偏暗紫、青紫色）是什么的典型舌象？',o:['湿热下注，膀胱有热','血瘀证或寒凝血滞','脾气虚弱，运化失职','外感表证，正邪相争'],a:1,ana:'想象橡皮管被捏住——管里的水流不动，颜色就会变暗变紫。紫暗舌是血液流通受阻的信号。',ex:'紫暗舌主血瘀证，常伴刺痛固定、皮肤瘀斑、脉涩。'},
+    {k:'pale',cn:'淡白舌',en:'Pale Tongue',q:'看到淡白舌，最可能对应哪种体质？',o:['实热体质，燥热内盛','气血两虚或阳虚寒证','湿热蕴结，舌苔厚腻','阴虚火旺，虚热内生'],a:1,ana:'把人体比作炉灶，淡白舌就是柴火不够、炉温偏低的信号，温煦推动能力下降。',ex:'常见症状：面色苍白、疲乏无力、畏寒肢冷、脉细无力。'}
+  ]},
+  2:{t:'舌苔辨证',q:[
+    {k:'white_coat',cn:'薄白苔',en:'Thin White',q:'这是薄白苔，隐约能看到舌质，属于什么状态？',o:['胃气正常，或外感初期','阳明热盛，邪热传里','湿热蕴结，苔腻如积粉','胃阴枯竭，无苔如镜'],a:0,ana:'薄白苔就像清晨凝结的薄霜——轻轻一吹就散，透明感强。身体底子是干净的，胃气正常。',ex:'薄白苔是正常苔象；外感风寒表证初期邪尚在表，苔仍薄白。'},
+    {k:'yellow_coat',cn:'黄苔',en:'Yellow Coat',q:'舌苔从白色变黄，说明发生了什么变化？',o:['寒邪入里，阳气受损','热证或病邪入里化热','气血不足，阴津亏损','外感表证，尚未化热'],a:1,ana:'就像白布被染了色：白苔是原色布，黄苔是被热气熏染之后的结果。苔色越黄，热邪越重。',ex:'黄苔是热证标志。淡黄→轻热；深黄/焦黄→热势较重。'},
+    {k:'thick_coat',cn:'厚白苔',en:'Thick Coat',q:'舌苔很厚实，完全遮盖了舌质，多提示什么？',o:['邪气入深，湿浊食积停滞','阴虚内热，肾水不足','气血两虚，正气亏损','表证初起，正邪交争'],a:0,ana:'把胃想象成一个房间：正常时干净整洁（薄苔）；积了很多杂物（食积、湿浊），就堆得满满（厚苔）。',ex:'厚苔主病邪较盛，或内有痰饮、食积、湿浊停聚，运化失司。'},
+    {k:'yellow_coat',cn:'黄腻苔',en:'Yellow Greasy',q:'黄苔且苔质油腻厚浊（黄腻苔），最典型对应哪种证型？',o:['寒湿证，寒邪困脾','湿热证，湿热交阻','血虚证，营血不足','肺气虚，卫表不固'],a:1,ana:'夏天厨房水槽：油渍（湿邪）遇上热水（热邪），产生黄色油腻污垢。湿与热胶着，既难清除又彼此催化。',ex:'黄腻苔是湿热证典型苔象。症状：口苦口黏、身热不扬、小便黄赤。'},
+    {k:'no_coat',cn:'镜面舌（无苔）',en:'Mirror Tongue',q:'舌面完全无苔，光滑如镜（镜面舌），说明什么？',o:['邪气化热，邪盛正旺','表证初起，正邪相当','胃气大伤、胃阴枯竭','脾胃湿热，运化受阻'],a:2,ana:'把胃气比作制造苔面的工厂——正常生产就有苔。镜面舌是工厂完全停产，连原材料都耗尽了。',ex:'镜面舌提示胃气大伤、胃阴枯竭，常见于重病后期或慢性消耗性疾病。'}
+  ]},
+  10:{t:'五色主病',q:[
+    {k:'face',cn:'正常面色',en:'Normal',q:'正常健康面色应该是什么样的？',o:['面色苍白，毫无光泽','面色红润有光泽（荣润）','面色晦暗，枯槁无神','面色发黄，萎黄无华'],a:1,ana:'就像浇水施肥充足的植物——叶子油亮有光泽，颜色饱满。荣润就是气血充盛的外在表现。',ex:'正常面色：红黄隐隐，明润含蓄，是气血充盛、精神内守的标志。'},
+    {k:'face',cn:'白色主病',en:'White',q:'面色发白（苍白）最主要反映哪类问题？',o:['湿热蕴结，肝胆有热','虚证（气血不足）或寒证','阴虚火旺，虚热内扰','血瘀气滞，经络不通'],a:1,ana:'就像关了暖气的房间，室温下降，墙壁变得冰冷苍白。面白就是热源不足、气血供应减少的信号。',ex:'白色主虚证、寒证。面色㿠白→阳虚寒凝；苍白突发→大出血或阳气暴脱。'},
+    {k:'face',cn:'红色主病',en:'Red',q:'面色持续异常红（非运动后）提示什么？',o:['气血充足，体质强健','热证（实热或虚热）','寒湿困脾，运化受阻','肾气不足，精气亏虚'],a:1,ana:'就像手机CPU过热——核心温度太高，散热口就会发红发烫。面部持续潮红是身体内部过热的外在表现。',ex:'红色主热证。满面通红→实热；午后颧红→阴虚虚热；久病面红如妆→虚阳外越危象。'},
+    {k:'face',cn:'黄色主病',en:'Yellow',q:'面色发黄（萎黄）最常见的原因是什么？',o:['热邪亢盛，内火旺盛','脾虚湿困或血虚','肾精亏损，髓海不足','肝气郁结，气机不畅'],a:1,ana:'就像土地过于潮湿板结——植物叶子就会变黄。脾虚湿盛，面色就像涝了的土地一样发黄。',ex:'黄色主脾虚、湿证。萎黄无泽→脾虚血少；黄而鲜明如橘→湿热（黄疸）；黄而晦暗→寒湿。'},
+    {k:'face',cn:'黑色主病',en:'Dark',q:'面色发黑（晦暗黧黑）提示哪类问题？',o:['外感风邪，表证初起','肾虚或寒凝、血瘀、水饮','湿热下注，膀胱有热','心火上炎，扰动心神'],a:1,ana:'就像长期没有阳光的阴暗角落，地面会变得潮湿发暗。面黑是肾阳不足或寒湿遮蔽气血的表现。',ex:'黑色主肾虚、寒凝、血瘀、水饮。眼眶发黑→肾虚或寒湿；面黑肌肤甲错→瘀血日久。'}
+  ]},
+  99:{t:'每日刷题',q:[]}
+};
+
+// ====== 我的舌诊问卷 ======
+const MINE_QS=[
+  {
+    q:'你平时容易感到疲劳吗？',
+    opts:[
+      {l:'很少，精神充沛',s:0},
+      {l:'偶尔，休息就好',s:1},
+      {l:'经常，容易累',s:2},
+      {l:'一直都很累',s:3}
+    ]
+  },
+  {
+    q:'你的睡眠质量怎么样？',
+    opts:[
+      {l:'很好，倒头就睡',s:0},
+      {l:'还行，偶尔失眠',s:1},
+      {l:'经常睡不好',s:2},
+      {l:'严重失眠或早醒',s:3}
+    ]
+  },
+  {
+    q:'你的消化系统情况？',
+    opts:[
+      {l:'食欲正常，大便正常',s:0},
+      {l:'偶尔胃胀或便溏',s:1},
+      {l:'经常腹胀、便溏或便秘',s:2},
+      {l:'长期消化问题',s:3}
+    ]
+  },
+  {
+    q:'你手脚的温度感觉？',
+    opts:[
+      {l:'温暖，一年四季正常',s:0},
+      {l:'冬天稍凉',s:1},
+      {l:'经常手脚冰凉',s:2},
+      {l:'即使夏天也冰凉',s:3}
+    ]
+  },
+  {
+    q:'你的情绪状态？',
+    opts:[
+      {l:'心态平稳，乐观',s:0},
+      {l:'偶尔焦虑或低落',s:1},
+      {l:'经常情绪波动大',s:2},
+      {l:'长期焦虑/抑郁',s:3}
+    ]
+  },
+  {
+    q:'你的面色整体看起来？',
+    opts:[
+      {l:'红润有光泽',s:0},
+      {l:'还行，稍微偏白或偏黄',s:1},
+      {l:'明显苍白/萎黄/暗淡',s:2},
+      {l:'晦暗发黑或潮红',s:3}
+    ]
+  }
+];
+
+const MINE_TYPES=[
+  {
+    range:[0,4],
+    type:'平和体质',
+    cn:'身体底子良好',
+    desc:'气血充盈，阴阳平衡。继续保持良好的作息和饮食习惯。',
+    risk:'低',
+    color:'#5a6642',
+    advice:'养生重点：维持。规律作息、均衡饮食、适度运动即可。',
+    products:[]
+  },
+  {
+    range:[5,9],
+    type:'气虚倾向',
+    cn:'元气不足',
+    desc:'稍显气虚，容易疲劳，抵抗力稍弱。日常可侧重补气健脾的食养方式。',
+    risk:'较低',
+    color:'#7a8a5a',
+    advice:'养生重点：补气健脾。黄芪、党参、茯苓可作为日常食养。可配合艾灸足三里。',
+    products:[
+      {name:'黄芪鲜阿胶',reason:'黄芪补气固表，阿胶养血润燥，适合气虚易疲劳人群日常调养',tag:'补气'},
+      {name:'八珍粉',reason:'经典健脾方，茯苓、白扁豆健脾渗湿，适合气虚兼有湿气的人',tag:'健脾'}
+    ]
+  },
+  {
+    range:[10,14],
+    type:'气血两虚',
+    cn:'气血不足',
+    desc:'气血亏虚明显，常见疲劳乏力、面色不佳、抵抗力差。需双补气血才能根本上改善。',
+    risk:'中等',
+    color:'#b8a870',
+    advice:'养生重点：双补气血。饮食上多吃红枣、桂圆、山药；配合食养膏方持续调养。',
+    products:[
+      {name:'玫瑰玉灵膏',reason:'玫瑰疏肝解郁配合玉灵膏补血养心，针对气血两虚伴情绪波动人群',tag:'补血'},
+      {name:'八珍粉',reason:'健脾益气，脾为气血生化之源，健脾是补气血的根本',tag:'补气'}
+    ]
+  },
+  {
+    range:[15,18],
+    type:'阳虚寒凝',
+    cn:'畏寒怕冷',
+    desc:'阳气不足，手脚冰凉，脾胃虚寒，稍微吃点凉的就容易腹泻。温补肾阳是关键。',
+    risk:'中等',
+    color:'#8a8070',
+    advice:'养生重点：温补肾阳。少吃生冷水果和冰饮，多晒太阳，艾灸关元、命门穴。',
+    products:[
+      {name:'黄精黑养膏',reason:'黄精补肾益精、黑芝麻养血润燥，适合肾阳不足导致的畏寒肢冷',tag:'温肾'},
+      {name:'黄芪鲜阿胶',reason:'气阳双补，阿胶温补而不滋腻，适合手脚冰凉、面色苍白人群',tag:'暖身'}
+    ]
+  },
+  {
+    range:[19,24],
+    type:'湿热蕴结',
+    cn:'内热湿重',
+    desc:'湿热内蕴，常见口苦、便黏臭、面部油腻长痘、舌苔黄腻。需清热祛湿双管齐下。',
+    risk:'较高',
+    color:'#7a3828',
+    advice:'养生重点：清热祛湿。赤小豆、薏米、冬瓜可配合使用。忌辛辣油腻、甜食、酒精。',
+    products:[
+      {name:'五指毛桃茯湿膏',reason:'五指毛桃健脾祛湿、茯苓渗湿利水，组方温而不燥，湿热体质适用',tag:'祛湿'},
+      {name:'手作系列',reason:'无添加手工制作，减少身体负担，配合祛湿效果更佳',tag:'清浊'}
+    ]
+  }
+];
+
+const KS=['A','B','C','D'];
+let G={xp:0,ul:[1,2,10],dn:[],cur:null,qi:0,co:0,st:0,ms:0,ans:false,cq:[],startTime:null,userPhoto:null,finishTime:null,mineUnlocked:true,minePhoto:null,mineAnswers:[],mineQi:0,mineDone:false};
+
+// ====== 页面控制 ======
+function show(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('act'));document.getElementById(id).classList.add('act');}
+function stab(btn,tid){
+  if(tid==='t4')return;
+  document.querySelectorAll('.nbt').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  ['t0','t1','t2','t3'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  const el=document.getElementById(tid);if(el)el.style.display='block';
+}
+function otab(tid){
+  const m={t0:0,t1:1,t2:2,t3:3};
+  const bs=document.querySelectorAll('.nbt');
+  bs.forEach(b=>b.classList.remove('on'));
+  if(bs[m[tid]])bs[m[tid]].classList.add('on');
+  ['t0','t1','t2','t3'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  const el=document.getElementById(tid);if(el)el.style.display='block';
+}
+
+// ====== XP系统 ======
+function uxp(){document.getElementById('xpd').textContent=G.xp+' XP';}
+function gh(){show('s0');ulv();}
+
+function ulv(){
+  [1,2,3,4].forEach(n=>{
+    const c=document.getElementById('lc'+n);const b=document.getElementById('lb'+n);
+    if(!c)return;
+    c.classList.remove('lk','dn');
+    if(G.dn.includes(n)){c.classList.add('dn');b.className='lvbg dn2';b.textContent='✓ 完成';}
+    else if(G.ul.includes(n)){b.className='lvbg op';b.textContent='开始';}
+    else{c.classList.add('lk');b.className='lvbg lk2';b.textContent='— 锁定';}
+  });
+  const d=G.dn.filter(n=>n<=4).length;
+  document.getElementById('gp').style.width=(d/12*100)+'%';
+  document.getElementById('gpl').textContent=d+' / 12 关';
+
+  // 我的舌诊卡片状态
+  const mc=document.getElementById('mineCard');
+  const mcs=document.getElementById('mineCardSt');
+  if(G.mineUnlocked){
+    mc.classList.remove('lk');
+    mc.classList.add('unlocked');
+    mcs.className='mst on';
+    mcs.textContent='已解锁';
+  }
+}
+
+function unlockMineNav(){
+  const btn=document.getElementById('mineNavBtn');
+  btn.classList.remove('locked');
+  btn.classList.add('on');
+  btn.style.opacity='1';
+  btn.style.color='var(--mo)';
+  btn.style.borderBottomColor='var(--mo)';
+  btn.style.fontWeight='600';
+  btn.onclick=function(){goMine();};
+}
+
+function goMine(){
+  if(!G.mineUnlocked)return;
+  // 重置状态
+  G.mineQi=0;
+  G.mineAnswers=[];
+  G.mineDone=false;
+  document.getElementById('mineUploadWrap').style.display='block';
+  document.getElementById('mineQs').style.display='none';
+  document.getElementById('mineProg').textContent='';
+  updateMineStartBtn();
+  show('s3');
+}
+
+function updateMineStartBtn(){
+  const btn=document.getElementById('mine-start');
+  btn.disabled=!G.minePhoto;
+}
+
+// ====== 答题流程 ======
+function go(n){
+  if(!G.ul.includes(n)&&n!==99)return;
+  G.cur=n;G.qi=0;G.co=0;G.st=0;G.ms=0;G.ans=false;G.startTime=Date.now();
+  let qs=[];
+  if(n===99){[1,2,10].forEach(k=>{if(DB[k])qs=qs.concat(DB[k].q);});qs=qs.sort(()=>Math.random()-.5).slice(0,5);}
+  else qs=(DB[n]&&DB[n].q)||[];
+  G.cq=qs;
+  document.getElementById('ltit').textContent=n===99?'每日刷题':(DB[n]?DB[n].t:'');
+  show('s1');rq();
+}
+
+function rq(){
+  const q=G.cq[G.qi];
+  document.getElementById('qpct').textContent=(G.qi+1)+' / '+G.cq.length;
+  document.getElementById('lp').style.width=((G.qi+1)/G.cq.length*100)+'%';
+  document.getElementById('tcn').textContent=q.cn;
+  document.getElementById('ten').textContent=q.en;
+  document.getElementById('tongueFrame').innerHTML=TV[q.k]||TV.normal;
+  const o=document.getElementById('opts');o.innerHTML='';
+  q.o.forEach((opt,i)=>{
+    const b=document.createElement('button');b.className='obt fade-up';
+    b.innerHTML='<span class="okey">'+KS[i]+'</span><span>'+opt+'</span>';
+    b.onclick=function(){ans(i);};o.appendChild(b);
+  });
+  document.getElementById('kcd').classList.remove('sh');
+  document.getElementById('nxtbt').style.display='none';
+  G.ans=false;ups();
+}
+
+function ans(i){
+  if(G.ans)return;G.ans=true;
+  const q=G.cq[G.qi];const ok=i===q.a;
+  document.querySelectorAll('.obt').forEach(function(b,idx){
+    b.classList.add('ds');
+    if(idx===q.a)b.classList.add('ok');
+    else if(idx===i&&!ok)b.classList.add('er');
+  });
+  if(ok){G.co++;G.st++;G.ms=Math.max(G.ms,G.st);G.xp+=12;}
+  else G.st=0;
+  uxp();ups();
+  document.getElementById('kcd').classList.add('sh');
+  const kr=document.getElementById('krt');
+  if(ok){document.getElementById('kico').textContent='*';kr.textContent='答对了 +12 XP';kr.className='kcrt ok';}
+  else{document.getElementById('kico').textContent='x';kr.textContent='答错了，记住这个比喻';kr.className='kcrt er';}
+  document.getElementById('kana').textContent=q.ana;
+  document.getElementById('kex').textContent=q.ex;
+  document.getElementById('nxtbt').style.display='block';
+}
+
+function ups(){for(let i=0;i<5;i++){const p=document.getElementById('p'+i);if(p)p.className='pp'+(i<G.st?' on':'');}}
+function nq(){G.qi++;if(G.qi>=G.cq.length){cmp();return;}rq();}
+
+function cmp(){
+  G.finishTime=Date.now();
+  const pct=G.co/G.cq.length;const stars=G.co===G.cq.length?3:G.co>=G.cq.length*0.6?2:1;
+  const bon=stars===3?30:stars===2?20:10;G.xp+=bon;uxp();
+  const n=G.cur;
+  if(n!==99&&!G.dn.includes(n)){G.dn.push(n);if(n+1<=4&&!G.ul.includes(n+1))G.ul.push(n+1);}
+
+  // 解锁我的舌诊（已默认解锁，跳过）
+  if(!G.mineUnlocked){
+    G.mineUnlocked=true;
+    unlockMineNav();
+  }
+
+  [1,2,3].forEach(function(s){document.getElementById('s'+s+'b').className='stbx'+(s<=stars?' lt':'');});
+  document.getElementById('cmcn').textContent=(n===99?'每日刷题':(DB[n]?DB[n].t:''))+'· 完成';
+  document.getElementById('sco').textContent=G.co+'/'+G.cq.length;
+  document.getElementById('sxp').textContent=G.xp;
+  document.getElementById('sst').textContent=G.ms;
+  document.getElementById('cmtime').textContent='';
+  const tp=document.getElementById('trps');tp.innerHTML='';
+  if(pct===1)tp.innerHTML+='<div class="trp">* 完美答题</div>';
+  if(G.ms>=3)tp.innerHTML+='<div class="trp">* 连击高手</div>';
+  if(G.xp>=60)tp.innerHTML+='<div class="trp">* 积分达人</div>';
+  if(!tp.innerHTML)tp.innerHTML='<div class="trp">继续加油，下次更好</div>';
+
+  // 显示解锁提示
+  const unlArea=document.getElementById('mineUnlockArea');
+  if(!G.mineUnlocked){unlArea.style.display='none';}
+  else{
+    unlArea.style.display='block';
+    unlArea.style.animation='fadeUp .3s ease forwards';
+  }
+
+  ulv();
+  show('s2');
+}
+
+function rl(){go(G.cur);}
+
+// ====== 照片上传 ======
+function handlePhoto(input){
+  const file=input.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    G.userPhoto=e.target.result;
+    document.getElementById('tongue-preview').src=G.userPhoto;
+    document.getElementById('tongueUpload').classList.add('has-photo');
+    document.getElementById('tongueFrame').style.display='none';
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
+
+function clearPhoto(){
+  G.userPhoto=null;
+  document.getElementById('tongue-preview').src='';
+  document.getElementById('tongueUpload').classList.remove('has-photo');
+  document.getElementById('tongueFrame').style.display='block';
+  document.getElementById('tongueFrame').innerHTML=TV[G.cq[G.qi]?.k]||TV.normal;
+}
+
+// ====== 我的舌诊 ======
+function handleMinePhoto(input){
+  const file=input.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    G.minePhoto=e.target.result;
+    document.getElementById('mine-preview').src=G.minePhoto;
+    document.getElementById('mineUpload').classList.add('has-photo');
+    updateMineStartBtn();
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
+
+function clearMinePhoto(){
+  G.minePhoto=null;
+  document.getElementById('mine-preview').src='';
+  document.getElementById('mineUpload').classList.remove('has-photo');
+  updateMineStartBtn();
+}
+
+function startMineTest(){
+  if(!G.minePhoto)return;
+  G.mineQi=0;
+  G.mineAnswers=[];
+  document.getElementById('mineUploadWrap').style.display='none';
+  document.getElementById('mineQs').style.display='block';
+  renderMineQs();
+}
+
+function renderMineQs(){
+  const wrap=document.getElementById('mineQs');
+  wrap.innerHTML='';
+  MINE_QS.forEach((q,idx)=>{
+    const div=document.createElement('div');
+    div.className='mine-q fade-up';
+    div.style.animationDelay=(idx*0.05)+'s';
+    div.innerHTML='<div class="mine-q-num">* Q'+(idx+1)+' / '+MINE_QS.length+'</div>'+
+      '<div class="mine-q-txt">'+q.q+'</div>'+
+      '<div class="mine-q-opts">';
+    q.opts.forEach((opt,optIdx)=>{
+      div.innerHTML+='<button class="mine-q-btn" data-q="'+idx+'" data-s="'+opt.s+'" onclick="selectMineAns('+idx+','+opt.s+',this)">'+
+        '<span class="qdot"></span><span class="qlbl">'+opt.l+'</span>'+
+        '<span class="qscore">'+opt.s+'分</span></button>';
+    });
+    div.innerHTML+='</div>';
+    wrap.appendChild(div);
+  });
+
+  // 底部完成按钮
+  const btnDiv=document.createElement('div');
+  btnDiv.style.cssText='padding:16px 0 20px';
+  btnDiv.innerHTML='<button id="mine-submit" onclick="submitMineTest()" style="display:block;width:100%;background:var(--pa3);color:var(--ik3);border:none;padding:14px;font-family:\'Noto Serif SC\',serif;font-size:14px;font-weight:600;cursor:default;letter-spacing:.5px;">请完成所有题目</button>';
+  wrap.appendChild(btnDiv);
+  updateMineSubmitBtn();
+}
+
+function selectMineAns(qIdx,s,btn){
+  const btns=document.querySelectorAll('.mine-q[data-q="'+qIdx+'"] .mine-q-btn');
+  btns.forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  G.mineAnswers[qIdx]=s;
+  updateMineSubmitBtn();
+}
+
+function updateMineSubmitBtn(){
+  const answered=G.mineAnswers.filter(v=>v!==undefined).length;
+  const total=MINE_QS.length;
+  const btn=document.getElementById('mine-submit');
+  document.getElementById('mineProg').textContent=answered+'/'+total;
+  if(answered===total){
+    btn.style.background='var(--mo)';
+    btn.style.color='#f0ece2';
+    btn.style.cursor='pointer';
+    btn.onclick=submitMineTest;
+  }else{
+    btn.textContent='已完成 '+answered+'/'+total;
+  }
+}
+
+function submitMineTest(){
+  if(G.mineAnswers.filter(v=>v!==undefined).length<MINE_QS.length)return;
+
+  // 计算分数
+  const totalScore=G.mineAnswers.reduce((a,b)=>a+b,0);
+  const avgScore=totalScore/MINE_QS.length;
+
+  // 匹配证型
+  let mineType=MINE_TYPES[0];
+  for(let i=MINE_TYPES.length-1;i>=0;i--){
+    if(totalScore>=MINE_TYPES[i].range[0]){
+      mineType=MINE_TYPES[i];
+      break;
+    }
+  }
+
+  // 渲染结果页
+  G.mineDone=true;
+  const scoreVal=Math.max(60,100-Math.round(avgScore*8));
+  document.getElementById('mineScore').textContent=scoreVal;
+  document.getElementById('mineType').textContent=mineType.type;
+  document.getElementById('mineRisk').textContent=mineType.risk;
+
+  const now=new Date();
+  document.getElementById('mineReportTime').textContent=
+    now.getFullYear()+'.'+String(now.getMonth()+1).padStart(2,'0')+'.'+String(now.getDate()).padStart(2,'0');
+
+  if(G.minePhoto){
+    document.getElementById('minePhotoArea').style.display='block';
+    document.getElementById('mineReportPhoto').src=G.minePhoto;
+  }else{
+    document.getElementById('minePhotoArea').style.display='none';
+  }
+
+  const ra=document.getElementById('mineResultArea');
+  ra.innerHTML=
+    '<div style="background:var(--sall);border-left:3px solid '+mineType.color+';padding:12px 14px;margin-bottom:14px;">'+
+    '<div style="font-family:\'Noto Serif SC\',serif;font-size:13px;font-weight:600;color:'+mineType.color+';">'+mineType.cn+'</div>'+
+    '<div style="font-size:12px;color:var(--ik2);line-height:1.7;margin-top:6px;">'+mineType.desc+'</div>'+
+    '</div>'+
+    '<div style="background:var(--pa2);border:1px solid var(--pa3);padding:12px 14px;margin-bottom:14px;">'+
+    '<div style="font-family:\'Noto Serif SC\',serif;font-size:12px;font-weight:600;color:var(--ik2);margin-bottom:6px;">💡 养生建议</div>'+
+    '<div style="font-size:12px;color:var(--ik3);line-height:1.7;">'+mineType.advice+'</div>'+
+    '</div>'+
+    buildProductSection(mineType);
+
+  show('s4');
+
+  // 弹出领取窗口
+  setTimeout(function(){document.getElementById('reportPopup').classList.add('show');},400);
+}
+
+function downloadMineReport(){
+  const canvas=document.createElement('canvas');
+  canvas.width=720;canvas.height=960;
+  const ctx=canvas.getContext('2d');
+  const W=720,H=960;
+
+  // 背景
+  ctx.fillStyle='#f0ece2';
+  ctx.fillRect(0,0,W,H);
+
+  // 顶部装饰
+  const now=new Date();
+  const dateStr=now.getFullYear()+'.'+String(now.getMonth()+1).padStart(2,'0')+'.'+String(now.getDate()).padStart(2,'0');
+
+  // 标题区
+  ctx.fillStyle='#5a6642';
+  ctx.fillRect(0,0,W,8);
+  ctx.fillRect(40,50,3,55);
+  ctx.font='bold 48px "Noto Serif SC", serif';
+  ctx.fillText('舌诊辨证报告',40,95);
+  ctx.font='italic 22px "IM Fell English", serif';
+  ctx.fillStyle='#9aaa7a';
+  ctx.fillText('Tongue Diagnosis Report  '+dateStr,40,128);
+
+  // 分数区
+  const totalScore=G.mineAnswers.reduce((a,b)=>a+b,0);
+  let mineType=MINE_TYPES[0];
+  for(let i=MINE_TYPES.length-1;i>=0;i--){
+    if(totalScore>=MINE_TYPES[i].range[0]){mineType=MINE_TYPES[i];break;}
+  }
+  const scoreVal=Math.max(60,100-Math.round((totalScore/MINE_QS.length)*8));
+
+  ctx.fillStyle='#f8f5ee';
+  ctx.fillRect(40,160,W-80,80);
+  ctx.strokeStyle='#ddd8c8';
+  ctx.lineWidth=1;
+  ctx.strokeRect(40,160,W-80,80);
+  ctx.font='bold 36px "Noto Serif SC", serif';
+  ctx.fillStyle='#5a6642';
+  ctx.fillText(scoreVal,60,208);
+  ctx.font='18px "Space Grotesk", sans-serif';
+  ctx.fillStyle='#8a8070';
+  ctx.fillText('综合评分',60,232);
+  ctx.fillStyle='#4a4438';
+  ctx.font='20px "Noto Serif SC", serif';
+  ctx.fillText('|  证型：'+mineType.type+'  |  风险：'+mineType.risk,W/2,210);
+
+  // 舌照
+  let photoY=270;
+  if(G.minePhoto){
+    ctx.fillStyle='#e8e3d5';
+    ctx.fillRect(40,photoY,280,220);
+    ctx.strokeStyle='#ddd8c8';
+    ctx.strokeRect(40,photoY,280,220);
+    const img=new Image();
+    img.crossOrigin='anonymous';
+    img.onload=function(){
+      ctx.drawImage(img,40,photoY,280,220);
+      drawMineReportRest(ctx,W,photoY+240,scoreVal,mineType,dateStr);
+    };
+    img.onerror=function(){
+      ctx.fillStyle='#8a8070';
+      ctx.font='20px "Space Grotesk", sans-serif';
+      ctx.fillText('舌象照片',100,photoY+120);
+      drawMineReportRest(ctx,W,photoY+240,scoreVal,mineType,dateStr);
+    };
+    img.src=G.minePhoto;
+  }else{
+    drawMineReportRest(ctx,W,photoY,scoreVal,mineType,dateStr);
+  }
+
+  canvas.toBlob(function(blob){
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download='我的舌诊报告_'+dateStr+'.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  },'image/png');
+}
+
+function drawMineReportRest(ctx,W,startY,scoreVal,mineType,dateStr){
+  // 分析说明
+  const y=startY;
+  ctx.fillStyle='#5a6642';
+  ctx.fillRect(40,y,3,30);
+  ctx.font='bold 22px "Noto Serif SC", serif';
+  ctx.fillText('证型分析',40,y+22);
+
+  ctx.fillStyle='#f8f5ee';
+  ctx.fillRect(40,y+40,W-80,70);
+  ctx.strokeStyle='#ddd8c8';
+  ctx.strokeRect(40,y+40,W-80,70);
+  ctx.fillStyle='#5a6642';
+  ctx.font='18px "Noto Serif SC", serif';
+  ctx.fillText(mineType.cn,55,y+62);
+  ctx.fillStyle='#4a4438';
+  ctx.font='15px "Space Grotesk", sans-serif';
+  const lines=wrapText(ctx,mineType.desc,W-110);
+  lines.forEach((l,i)=>ctx.fillText(l,55,y+82+i*18));
+
+  // 养生建议
+  const ay=y+130;
+  ctx.fillStyle='#f8f5ee';
+  ctx.fillRect(40,ay,W-80,90);
+  ctx.strokeStyle='#ddd8c8';
+  ctx.strokeRect(40,ay,W-80,90);
+  ctx.fillStyle='#4a4438';
+  ctx.font='bold 16px "Noto Serif SC", serif';
+  ctx.fillText('养生建议',55,ay+22);
+  ctx.font='15px "Space Grotesk", sans-serif';
+  const advLines=wrapText(ctx,mineType.advice,W-110);
+  advLines.forEach((l,i)=>ctx.fillText(l,55,ay+48+i*18));
+
+  // 产品推荐
+  let prodY=ay+110;
+  if(mineType.products && mineType.products.length>0){
+    ctx.fillStyle='#5a6642';
+    ctx.fillRect(40,prodY,3,24);
+    ctx.font='bold 16px "Noto Serif SC", serif';
+    ctx.fillText('食养方案推荐',40,prodY+18);
+
+    prodY+=32;
+    mineType.products.forEach(function(p,pi){
+      const ph=60;
+      ctx.fillStyle='#f8f5ee';
+      ctx.fillRect(40,prodY,W-80,ph);
+      ctx.strokeStyle='#ddd8c8';
+      ctx.strokeRect(40,prodY,W-80,ph);
+
+      ctx.fillStyle='#5a6642';
+      ctx.font='bold 14px "Noto Serif SC", serif';
+      ctx.fillText(p.name,55,prodY+20);
+
+      ctx.fillStyle='#7a8a5a';
+      ctx.font='12px "Space Grotesk", sans-serif';
+      ctx.fillText('#'+p.tag,55,prodY+38);
+
+      ctx.fillStyle='#8a8070';
+      ctx.font='13px "Space Grotesk", sans-serif';
+      const pLines=wrapText(ctx,p.reason,W-110);
+      pLines.slice(0,1).forEach((l)=>ctx.fillText(l,55,prodY+54));
+
+      prodY+=ph+8;
+    });
+
+    // 软引导
+    ctx.fillStyle='#e8e3d5';
+    ctx.fillRect(40,prodY,W-80,50);
+    ctx.strokeStyle='#ddd8c8';
+    ctx.strokeRect(40,prodY,W-80,50);
+    ctx.fillStyle='#8a8070';
+    ctx.font='13px "Space Grotesk", sans-serif';
+    ctx.textAlign='center';
+    ctx.fillText('想了解更多适合自己的食养方案？主页私信咨询',W/2,prodY+22);
+    ctx.fillStyle='#5a6642';
+    ctx.font='bold 12px "Noto Serif SC", serif';
+    ctx.fillText('所有产品均为纯食养，无添加',W/2,prodY+40);
+    ctx.textAlign='left';
+    prodY+=60;
+  } else {
+    // 平和体质
+    ctx.fillStyle='#f0ece2';
+    ctx.fillRect(40,prodY,W-80,50);
+    ctx.strokeStyle='#ddd8c8';
+    ctx.strokeRect(40,prodY,W-80,50);
+    ctx.fillStyle='#8a8070';
+    ctx.font='14px "Space Grotesk", sans-serif';
+    ctx.textAlign='center';
+    ctx.fillText('平和体质，维持就好。规律作息，均衡饮食，是最好的养生',W/2,prodY+30);
+    ctx.textAlign='left';
+    prodY+=60;
+  }
+
+  // 底部品牌
+  const by=Math.max(prodY+10,H-120);
+  ctx.fillStyle='#e8e3d5';
+  ctx.fillRect(0,by,W,H-by);
+  ctx.fillStyle='#5a6642';
+  ctx.font='bold 24px "Noto Serif SC", serif';
+  ctx.fillText('大米中医',40,by+30);
+  ctx.font='italic 14px "IM Fell English", serif';
+  ctx.fillStyle='#9aaa7a';
+  ctx.fillText('DA MI · HEALTH',40,by+48);
+
+  // 右下角装饰
+  ctx.fillStyle='#5a6642';
+  ctx.globalAlpha=0.06;
+  ctx.font='italic 160px "IM Fell English", serif';
+  ctx.textAlign='right';
+  ctx.fillText('*',W-20,H-10);
+  ctx.globalAlpha=1;
+  ctx.textAlign='left';
+}
+
+function wrapText(ctx,text,maxWidth){
+  const words=text.split('');
+  const lines=[];
+  let line='';
+  for(const char of words){
+    const test=line+char;
+    if(ctx.measureText(test).width>maxWidth&&line){
+      lines.push(line);line=char;
+    }else{line=test;}
+  }
+  if(line)lines.push(line);
+  return lines;
+}
+
+// ====== 产品推荐区块 ======
+function buildProductSection(mineType){
+  if(!mineType.products || mineType.products.length===0){
+    return '<div style="background:linear-gradient(135deg,var(--moxl),var(--pa2));border:1px solid var(--mol);padding:14px;border-radius:8px;text-align:center;font-size:12px;color:var(--ik3);line-height:1.8;">'+
+      '✨ 平和体质继续保持就好<br>规律作息，均衡饮食，就是最好的养生'+
+      '</div>';
+  }
+  let html='<div style="margin-bottom:14px;">'+
+    '<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:10px;">'+
+    '<div style="font-family:\'Noto Serif SC\',serif;font-size:12px;font-weight:600;color:var(--ik2);">🍃 食养方案推荐</div>'+
+    '<div style="flex:1;height:1px;background:var(--pa3);"></div>'+
+    '</div>';
+  mineType.products.forEach(function(p){
+    html+='<div style="background:var(--cr);border:1px solid var(--pa3);padding:12px;margin-bottom:8px;border-radius:6px;">'+
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">'+
+      '<div style="font-family:\'Noto Serif SC\',serif;font-size:13px;font-weight:600;color:var(--mo);">'+p.name+'</div>'+
+      '<div style="background:var(--moxl);border:1px solid var(--mol);padding:2px 8px;font-size:10px;color:var(--mo2);">'+p.tag+'</div>'+
+      '</div>'+
+      '<div style="font-size:11px;color:var(--ik3);line-height:1.6;">'+p.reason+'</div>'+
+      '</div>';
+  });
+  html+='<div style="background:var(--pa2);border:1px solid var(--pa3);padding:10px 12px;border-radius:6px;text-align:center;">'+
+    '<div style="font-size:11px;color:var(--ik3);line-height:1.7;">'+
+    '想了解适合自己的完整食养方案<br>'+
+    '可以主页私信咨询<br>'+
+    '<span style="color:var(--mo);font-weight:600;">所有产品均为纯食养，无添加</span>'+
+    '</div>'+
+    '</div>';
+  html+='</div>';
+  return html;
+}
+
+// ====== 速查 ======
+const REF_DATA={
+  '舌色':[
+    {q:'淡红舌',a:'气血调和，正常健康舌象。舌体红润、苔薄白润。见于健康人或病情轻浅。'},
+    {q:'淡白舌',a:'气血两虚或阳虚寒证。舌体色淡偏白，缺乏血色。常见于贫血、营养不良、久病体虚。'},
+    {q:'红舌',a:'热证。舌鲜红提示体内有热。舌尖红→心火；舌边红→肝胆热；全舌红→实热内盛。'},
+    {q:'绛舌',a:'热入营血或阴虚火旺。舌深红偏暗，热邪深入体内，常见于长期消耗性疾病后期。'},
+    {q:'紫暗舌',a:'血瘀证。舌色偏暗有紫斑，提示血液循环不畅。常见于血瘀体质、痛经、心脑血管问题。'}
+  ],
+  '舌苔':[
+    {q:'薄白苔',a:'正常苔象，胃气充盈。也可见于外感风寒初期，病情轻浅。'},
+    {q:'白厚苔',a:'湿浊或食积内停。苔厚遮舌，脾胃运化失常，常见于消化不良、痰湿体质。'},
+    {q:'黄苔',a:'热证。苔黄表示热邪内盛。淡黄→轻热；深黄→热盛；焦黄→热极。'},
+    {q:'黄腻苔',a:'湿热证。苔黄且油腻，湿热胶着。常见口苦、肛门灼热、小便黄赤。'},
+    {q:'无苔/镜面舌',a:'胃阴枯竭。舌面光滑无苔，胃气严重损伤，见于重病后期或长期消耗性疾病。'}
+  ],
+  '面色':[
+    {q:'面色红润',a:'气血充盈，健康面色。无论肤色深浅，整体润泽有光。'},
+    {q:'面色苍白',a:'虚证、寒证。气血不足或阳气虚弱，常见于贫血、体弱、长期患病。'},
+    {q:'面色潮红',a:'热证。实热或阴虚火旺。满面通红→实热；午后颧红→阴虚。'},
+    {q:'面色萎黄',a:'脾虚、湿证。气血生化不足或湿邪困阻，常见于消化系统问题。'},
+    {q:'面色黧黑',a:'肾虚、寒凝、血瘀。肾阳不足或血瘀日久，病情较深，需重视。'}
+  ],
+  '体质':[
+    {q:'平和质',a:'阴阳气血调和，体态适中，精力充沛，不易患病。养生：维持即可。'},
+    {q:'气虚质',a:'元气不足，容易疲劳，声音低弱，出汗多。养生：补气健脾，多晒太阳。'},
+    {q:'阳虚质',a:'阳气不足，畏寒怕冷，手脚冰凉。养生：温补肾阳，少吃生冷，艾灸保健。'},
+    {q:'阴虚质',a:'阴液不足，手脚心热，口干舌燥，盗汗。养生：滋阴润燥，忌辛辣炸烤。'},
+    {q:'痰湿质',a:'湿邪内盛，体形肥胖，口黏苔腻，大便黏滞。养生：祛湿化痰，饮食清淡。'},
+    {q:'湿热质',a:'湿热内蕴，面油长痘，口苦尿黄。养生：清热祛湿，忌辛辣油腻。'},
+    {q:'血瘀质',a:'血液循环不畅，面色晦暗，舌有瘀斑，疼痛固定。养生：活血化瘀，适度运动。'},
+    {q:'气郁质',a:'气机郁结，情绪抑郁，爱叹气，睡眠差。养生：疏肝理气，情志调摄。'},
+    {q:'特禀质',a:'过敏体质，对环境或食物敏感。养生：避免过敏原，增强体质。'}
+  ],
+  '穴位':[
+    {q:'足三里',a:'胃经合穴，位于小腿。健脾和胃、益气补血。主治胃痛、腹胀、消化不良、体虚疲劳。'},
+    {q:'关元穴',a:'任脉穴，位于下腹部。补肾固本、温阳固脱。主治畏寒怕冷、月经不调、阳痿遗精。'},
+    {q:'命门穴',a:'督脉穴，位于腰部。温肾壮阳、强腰固本。主治腰膝酸软、畏寒、阳痿遗精。'},
+    {q:'中脘穴',a:'胃经募穴，位于上腹部。理气和胃、降逆止呕。主治胃痛、胃胀、恶心呕吐。'},
+    {q:'三阴交',a:'脾经穴，位于内踝上。健脾疏肝、滋阴补肾。主治月经不调、失眠、脾胃虚弱。'},
+    {q:'合谷穴',a:'大肠经穴，位于手背。疏风解表、通络止痛。主治感冒发热、头痛、牙痛。'},
+    {q:'太冲穴',a:'肝经原穴，位于足背。疏肝理气、清肝火。主治生气后不适、头痛、眩晕。'},
+    {q:'涌泉穴',a:'肾经井穴，位于足底。滋阴降火、安神定志。主治失眠、头晕、五心烦热。'}
+  ],
+  '食养':[
+    {q:'气虚食养',a:'宜：山药、黄芪、党参、大枣、桂圆、小米、粳米。忌：生冷寒凉、辛辣耗气食物。'},
+    {q:'血虚食养',a:'宜：红枣、桂圆、红豆、枸杞、猪肝、菠菜、黑木耳。忌：生冷、油腻、过度加工食品。'},
+    {q:'阳虚食养',a:'宜：羊肉、韭菜、肉桂、核桃、姜、葱、蒜。忌：冰品、生冷、绿茶、梨等寒凉食物。'},
+    {q:'阴虚食养',a:'宜：银耳、百合、麦冬、沙参、玉竹、石斛、莲子。忌：辛辣、炸烤、牛羊肉等热性食物。'},
+    {q:'湿热食养',a:'宜：薏米、赤小豆、冬瓜、绿豆、芹菜、苦瓜。忌：辛辣、油腻、甜食、酒精、芒果。'},
+    {q:'脾虚食养',a:'宜：山药、茯苓、莲子、白扁豆、芡实、陈皮。忌：生冷、油腻、甜腻、暴饮暴食。'}
+  ],
+  '脾虚':[
+    {q:'脾虚表现',a:'食欲不振、腹胀、大便溏稀或便秘、面色萎黄、身体沉重、容易疲劳、舌边有齿痕、舌苔白厚。'},
+    {q:'脾虚原因',a:'饮食不规律、过度劳累、久病体虚、思虑过度（中医说"思伤脾"）、缺乏运动。'},
+    {q:'脾虚调理',a:'饮食规律、避免生冷、多吃健脾食物（山药、茯苓、莲子）、适度运动、艾灸足三里。'},
+    {q:'脾虚食养方',a:'四神汤（山药、茯苓、莲子、芡实）炖排骨；八珍粉调糊；山药小米粥。'}
+  ],
+  '注意事项':[
+    {q:'看舌最佳时间',a:'起床后1小时、餐后2小时、饮水后1小时。避免吃过染色食物后立刻看舌。'},
+    {q:'光线影响',a:'自然光最佳，避免在有色灯光下看舌。上午10点左右背对阳光看最准确。'},
+    {q:'染苔影响',a:'牛奶豆浆使苔白；巧克力咖啡使苔褐；有色糖果使苔染；维生素B2使苔黄。'},
+    {q:'刮舌问题',a:'不宜刮舌，会损伤舌乳头影响诊断。建议晨起先看舌再刷牙。'},
+    {q:'舌象记录',a:'建议用手机在相同光线条件下拍照记录，对比不同时期舌象变化。'}
+  ]
+};
+
+function showRef(key){
+  const data=REF_DATA[key]||REF_DATA['舌色'];
+  document.getElementById('refTitle').textContent=key+'速查';
+  const body=document.getElementById('refBody');
+  body.innerHTML='';
+  data.forEach(function(item){
+    const d=document.createElement('div');
+    d.className='ref-item';
+    d.innerHTML='<div class="ref-item-q">'+item.q+'</div><div class="ref-item-a">'+item.a+'</div>';
+    body.appendChild(d);
+  });
+  document.getElementById('refOverlay').classList.add('show');
+  document.getElementById('refPanel').classList.add('show');
+}
+
+function closeRef(){
+  document.getElementById('refOverlay').classList.remove('show');
+  document.getElementById('refPanel').classList.remove('show');
+}
+
+// ====== 隐藏的mine photo input ======
+document.addEventListener('DOMContentLoaded',function(){
+  const inp=document.createElement('input');
+  inp.type='file';inp.id='minePhotoInput';inp.accept='image/*';inp.capture='environment';
+  inp.style.display='none';
+  inp.onchange=function(){handleMinePhoto(inp);};
+  document.body.appendChild(inp);
+  document.getElementById('mineUpload').querySelector('.uoverlay2').onclick=function(e){e.stopPropagation();};
+});
+
+// ====== 初始化 ======
+ulv();
+</script>
+</body>
+</html>
