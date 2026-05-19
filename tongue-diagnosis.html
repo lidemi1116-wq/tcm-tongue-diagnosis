@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>舌诊辨证 · 入门课堂</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Nunito:wght@400;600;700&display=swap');
+
+:root {
+  --sand:    #fef2f2;
+  --sand2:   #fecaca;
+  --sand3:   #fca5a5;
+  --ink:     #1f2937;
+  --ink2:    #4b5563;
+  --ink3:    #9ca3af;
+  --ochre:   #f87171;
+  --ochre2:  #fca5a5;
+  --ochre-l: #fff5f5;
+  --rust:    #ef4444;
+  --rust-l:  #fef2f2;
+  --sage:    #10b981;
+  --sage-l:  #ecfdf5;
+  --cream:   #fffbfb;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Nunito', 'Noto Serif SC', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* ===== SCREENS ===== */
+.screen { display: none; width: 100%; max-width: 480px; }
+.screen.active { display: block; }
+
+/* ===== HOME ===== */
+.home-header {
+  background: var(--sand);
+  border: 2px solid var(--sand2);
+  border-radius: 16px;
+  padding: 1.2rem 1.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+.brand-cn { font-family: 'Noto Serif SC', serif; font-size: 16px; font-weight: 700; color: var(--ink); }
+.brand-en { font-size: 10px; color: var(--ink3); letter-spacing: 2px; margin-top: 2px; }
+.xp-pill {
+  background: var(--ochre);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+.home-subtitle {
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink3);
+  margin-bottom: 1.2rem;
+}
+
+.level-card {
+  background: white;
+  border: 2px solid var(--sand2);
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.level-card:hover { transform: translateY(-3px); border-color: var(--ochre2); box-shadow: 0 4px 16px rgba(248,113,113,0.15); }
+.level-card.locked { opacity: 0.45; cursor: not-allowed; }
+.level-card.locked:hover { transform: none; border-color: var(--sand2); box-shadow: none; }
+.level-card.done { border-color: var(--sage); background: var(--sage-l); }
+
+.lv-num {
+  width: 48px; height: 48px;
+  background: var(--sand);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  flex-shrink: 0;
+}
+.lv-info { flex: 1; }
+.lv-cn { font-family: 'Noto Serif SC', serif; font-size: 15px; font-weight: 700; color: var(--ink); }
+.lv-en { font-size: 10px; color: var(--ink3); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+.lv-status {
+  font-size: 11px; font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 8px;
+}
+.lv-status.open { background: var(--ochre); color: white; }
+.lv-status.done { background: var(--sage); color: white; }
+.lv-status.lock { background: var(--sand2); color: var(--ink3); }
+
+.lv-stripe {
+  position: absolute; right: 0; top: 0; bottom: 0;
+  width: 5px;
+  background: var(--ochre);
+  border-radius: 0 12px 12px 0;
+}
+.level-card.done .lv-stripe { background: var(--sage); }
+
+/* ===== LESSON ===== */
+.lesson-header {
+  background: var(--sand);
+  border: 2px solid var(--sand2);
+  border-radius: 16px;
+  padding: 0.9rem 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.progress-bar {
+  width: 120px; height: 8px;
+  background: var(--sand2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-fill { height: 100%; background: var(--ochre); border-radius: 4px; transition: width 0.4s; }
+.back-btn { font-size: 12px; color: var(--ink3); cursor: pointer; padding: 6px; }
+.back-btn:hover { color: var(--ink); }
+
+/* Tongue illustration frame */
+.tongue-frame {
+  background: white;
+  border: 2px solid var(--sand2);
+  border-radius: 16px;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+  position: relative;
+}
+.tf-corner {
+  position: absolute;
+  width: 20px; height: 20px;
+  border: 2px solid var(--sand3);
+}
+.tf-tl { top: 8px; left: 8px; border-right: none; border-bottom: none; border-radius: 6px 0 0 0; }
+.tf-tr { top: 8px; right: 8px; border-left: none; border-bottom: none; border-radius: 0 6px 0 0; }
+.tf-bl { bottom: 8px; left: 8px; border-right: none; border-top: none; border-radius: 0 0 0 6px; }
+.tf-br { bottom: 8px; right: 8px; border-left: none; border-top: none; border-radius: 0 0 6px 0; }
+
+.tongue-label {
+  position: absolute; top: 12px; left: 36px;
+  font-size: 10px; color: var(--ink3);
+}
+#tongue-svg { margin: 0.5rem 0; }
+.tongue-en { font-size: 11px; color: var(--ink3); letter-spacing: 1px; }
+
+/* Question */
+.question-text {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: center;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+/* Options */
+.opt-list { display: flex; flex-direction: column; gap: 8px; }
+.opt-item {
+  background: white;
+  border: 2px solid var(--sand2);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.opt-item:hover { background: var(--ochre-l); border-color: var(--ochre2); }
+.opt-item.correct { background: var(--sage-l); border-color: var(--sage); }
+.opt-item.wrong { background: var(--rust-l); border-color: var(--rust); }
+.opt-item.disabled { cursor: default; }
+
+.opt-key {
+  width: 26px; height: 26px;
+  background: var(--sand);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+  flex-shrink: 0;
+}
+.opt-item.correct .opt-key { background: var(--sage); color: white; }
+.opt-item.wrong .opt-key { background: var(--rust); color: white; }
+.opt-text { font-size: 13px; color: var(--ink2); line-height: 1.5; }
+
+/* Knowledge Card */
+.know-card {
+  background: var(--ochre-l);
+  border: 2px solid var(--ochre2);
+  border-radius: 14px;
+  padding: 1rem;
+  margin-top: 1rem;
+  display: none;
+}
+.know-card.show { display: block; }
+
+.know-header {
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 0.8rem;
+}
+.know-tag {
+  background: var(--ochre);
+  color: white;
+  font-size: 10px; font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
+}
+.know-en { font-size: 10px; color: var(--ink3); }
+
+.know-row { display: flex; align-items: center; gap: 8px; margin-bottom: 0.7rem; }
+.know-icon { font-size: 16px; }
+.know-result { font-size: 13px; font-weight: 700; }
+.know-result.ok { color: var(--sage); }
+.know-result.fail { color: var(--rust); }
+
+.know-analogy {
+  background: white;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 0.6rem;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.know-analogy-tag {
+  display: inline-block;
+  background: var(--sand);
+  color: var(--ink2);
+  font-size: 9px; font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-right: 6px;
+}
+.know-exp {
+  font-size: 11px;
+  color: var(--ink2);
+  line-height: 1.6;
+  padding: 0 4px;
+}
+
+/* Next button */
+.next-btn {
+  display: none;
+  width: 100%;
+  background: var(--ochre);
+  color: white;
+  font-size: 14px; font-weight: 700;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+.next-btn.show { display: block; }
+
+/* ===== COMPLETE ===== */
+.complete-screen { text-align: center; padding: 1rem 0; }
+.complete-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 22px; font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 1.5rem;
+}
+.stars-row { display: flex; justify-content: center; gap: 12px; margin-bottom: 1.5rem; }
+.star {
+  width: 56px; height: 56px;
+  background: var(--sand);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  transition: all 0.3s;
+}
+.star.lit { background: var(--ochre-l); }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 1.2rem;
+}
+.stat-box {
+  background: white;
+  border: 2px solid var(--sand2);
+  border-radius: 12px;
+  padding: 12px 8px;
+}
+.stat-val { font-size: 22px; font-weight: 700; color: var(--ochre); }
+.stat-label { font-size: 10px; color: var(--ink3); margin-top: 4px; }
+
+.trophy-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.trophy {
+  background: var(--sand);
+  font-size: 11px; font-weight: 600;
+  color: var(--ink2);
+  padding: 5px 12px;
+  border-radius: 6px;
+}
+
+.replay-btn {
+  background: var(--ochre);
+  color: white;
+  font-size: 14px; font-weight: 700;
+  padding: 13px 32px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+</style>
+</head>
+<body>
+
+<!-- HOME SCREEN -->
+<div id="s-home" class="screen active">
+  <div class="home-header">
+    <div>
+      <div class="brand-cn">舌诊辨证 · 入门课堂</div>
+      <div class="brand-en">TCM TONGUE DIAGNOSIS</div>
+    </div>
+    <div class="xp-pill" id="xp-display">0 XP</div>
+  </div>
+  <div class="home-subtitle">0基础也能学懂的中医舌诊课</div>
+  <div id="level-list"></div>
+</div>
+
+<!-- LESSON SCREEN -->
+<div id="s-lesson" class="screen">
+  <div class="lesson-header">
+    <div class="back-btn" onclick="goHome()">← 返回</div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+    <div style="font-size:11px;color:var(--ink3)" id="q-count">1/5</div>
+  </div>
+  <div class="tongue-frame">
+    <div class="tf-corner tf-tl"></div>
+    <div class="tf-corner tf-tr"></div>
+    <div class="tf-corner tf-bl"></div>
+    <div class="tf-corner tf-br"></div>
+    <div class="tongue-label" id="t-label">舌象</div>
+    <div id="tongue-svg"></div>
+    <div class="tongue-en" id="t-en">tongue</div>
+  </div>
+  <div class="question-text" id="q-text"></div>
+  <div class="opt-list" id="opt-list"></div>
+  <div class="know-card" id="know-card">
+    <div class="know-header">
+      <span class="know-tag">知识点</span>
+      <span class="know-en">KNOWLEDGE</span>
+    </div>
+    <div class="know-row">
+      <span class="know-icon" id="k-icon">✦</span>
+      <span class="know-result" id="k-result"></span>
+    </div>
+    <div class="know-analogy">
+      <span class="know-analogy-tag">具象比喻</span>
+      <span id="k-analogy"></span>
+    </div>
+    <div class="know-exp" id="k-exp"></div>
+  </div>
+  <button class="next-btn" id="next-btn" onclick="nextQ()">继续答题 →</button>
+</div>
+
+<!-- COMPLETE SCREEN -->
+<div id="s-complete" class="screen">
+  <div class="complete-screen">
+    <div class="complete-title" id="complete-title">通关成功！</div>
+    <div class="stars-row" id="stars-row"></div>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="stat-val" id="stat-correct">0</div><div class="stat-label">正确题数</div></div>
+      <div class="stat-box"><div class="stat-val" id="stat-xp">0</div><div class="stat-label">获得XP</div></div>
+      <div class="stat-box"><div class="stat-val" id="stat-streak">0</div><div class="stat-label">最高连击</div></div>
+    </div>
+    <div class="trophy-row" id="trophy-row"></div>
+    <button class="replay-btn" onclick="goHome()">再练一遍</button>
+  </div>
+</div>
+
+<script>
+// ===== TONGUE SVG LIBRARY =====
+const T = {
+  normal: `<svg viewBox="0 0 140 130" width="140" height="130">
+    <ellipse cx="70" cy="75" rx="55" ry="40" fill="#e8a898" opacity="0.8"/>
+    <ellipse cx="70" cy="72" rx="48" ry="34" fill="#edddd5" opacity="0.5"/>
+    <line x1="70" y1="55" x2="70" y2="105" stroke="#d4a0a0" stroke-width="1.5" opacity="0.4"/>
+  </svg>`,
+  pale: `<svg viewBox="0 0 140 130" width="140" height="130">
+    <ellipse cx="70" cy="75" rx="55" ry="40" fill="#edddd5"/>
+    <ellipse cx="70" cy="72" rx="48" ry="34" fill="#f5f3ee" opacity="0.6"/>
+    <line x1="70" y1="55" x2="70" y2="105" stroke="#e0d8d0" stroke-width="1.5" opacity="0.3"/>
+  </svg>`,
+  red: `<svg viewBox="0 0 140 130" width="140" height="130">
+    <ellipse cx="70" cy="75" rx="55" ry="40" fill="#c8453a"/>
+    <circle cx="50" cy="65" r="4" fill="#8b2252" opacity="0.7"/>
+    <circle cx="65" cy="58" r="3" fill="#8b2252" opacity="0.7"/>
+    <circle cx="80" cy="62" r="3.5" fill="#8b2252" opacity="0.7"/>
+    <circle cx="58" cy="78" r="3" fill="#8b2252" opacity="0.7"/>
+    <circle cx="82" cy="80" r="4" fill="#8b2252" opacity="0.7"/>
+  </svg>`,
+  crimson: `<svg viewBox="0 0 140 130" width="140" height="130">
+    <ellipse cx="70" cy="75" rx="55" ry="40" fill="#8b2252"/>
+    <ellipse cx="70" cy="73" rx="45" ry="32" fill="#5a4a7a" opacity="0.5"/>
+  </svg>`,
+  purple: `<svg viewBox="0 0 140 130" width="140" height="130">
+    <ellipse cx="70" cy="75" rx="55" ry="40" fill="#5a4a7a"/>
+    <ellipse cx="70" cy="73" rx="45" ry="32" fill="#3a2a5a" opacity="0.5"/>
+  </svg>`,
+  white_coat: `<svg viewBox="0 0 140 130" width="140" height="130">
+    <ellipse cx="70" cy="75" rx="55" ry="40" fill="#e8a898" opacity="0.7"/>
+    <ellipse cx="70" cy="73" rx="50" ry="36" fill="#f5f3ee" opacity="0.88"/>
+  </svg>`,
+  yellow_coat: `<svg viewBox="0 0 140 130" width="140" height="130">
+    <ellipse cx="70" cy="75" rx="55" ry="40" fill="#c8453a" opacity="0.75"/>
+    <ellipse cx="70" cy="72" rx="50" ry="35" fill="#d4aa40" opacity="0.85"/>
+  </svg>`,
+  thick_coat: `<svg viewBox="0 0 140 130" width="140" height="130">
+    <ellipse cx="70" cy="75" rx="55" ry="40" fill="#c8453a" opacity="0.6"/>
+    <ellipse cx="70" cy="72" rx="52" ry="38" fill="#e8e4db" opacity="0.95"/>
+    <rect x="45" y="58" width="50" height="3" rx="1" fill="#bfb9a8" opacity="0.6"/>
+    <rect x="48" y="68" width="44" height="2" rx="1" fill="#bfb9a8" opacity="0.5"/>
+  </svg>`,
+  no_coat: `<svg viewBox="0 0 140 130" width="140" height="130">
+    <ellipse cx="70" cy="75" rx="55" ry="40" fill="#8b2252"/>
+    <ellipse cx="70" cy="73" rx="45" ry="30" fill="#6b3a5a" opacity="0.6"/>
+    <line x1="70" y1="55" x2="70" y2="105" stroke="#5a2a4a" stroke-width="1.5" opacity="0.4"/>
+  </svg>`,
+  fat: `<svg viewBox="0 0 140 130" width="140" height="130">
+    <ellipse cx="70" cy="75" rx="65" ry="48" fill="#edddd5"/>
+    <ellipse cx="70" cy="72" rx="58" ry="40" fill="#f5f3ee" opacity="0.6"/>
+    <line x1="70" y1="50" x2="70" y2="100" stroke="#e0d8d0" stroke-width="1.5" opacity="0.3"/>
+  </svg>`,
+  scalloped: `<svg viewBox="0 0 140 130" width="140" height="130">
+    <ellipse cx="70" cy="75" rx="60" ry="44" fill="#edddd5"/>
+    <path d="M20,72 Q15,75 20,80 Q25,85 30,80 Q35,75 40,80 Q45,85 50,80" stroke="#d4c8c0" stroke-width="2" fill="none" opacity="0.7"/>
+    <path d="M90,80 Q95,85 100,80 Q105,75 110,80 Q115,85 120,80" stroke="#d4c8c0" stroke-width="2" fill="none" opacity="0.7"/>
+    <ellipse cx="70" cy="72" rx="52" ry="36" fill="#f5f3ee" opacity="0.6"/>
+  </svg>`
+};
+
+// ===== QUESTION DATA =====
+const DATA = [
+  {
+    id: 1, lv: '一', cn: '舌色辨证', en: 'TONGUE COLOR',
+    qs: [
+      {t:'normal',tl:'淡红舌',te:'Normal Tongue',
+       q:'这张舌头的颜色是淡红舌，代表什么状态？',
+       opts:['气血调和，属健康状态','气血不足，阳气虚衰','热邪内盛，舌尖发红','血脉瘀阻，颜色暗紫'],ans:0,
+       analogy:'就像水龙头出水量刚刚好——既不是涓涓细流（水气血不足），也不是滚烫的热水（热邪亢盛），温度和水量都正常。',
+       exp:'淡红舌是气血充足、阴阳平衡的健康基准舌象。'},
+
+      {t:'pale',tl:'淡白舌',te:'Pale Tongue',
+       q:'这条舌头颜色偏淡、接近白色，中医叫它——',
+       opts:['红舌','淡白舌','绛舌','紫暗舌'],ans:1,
+       analogy:'想象一盆植物长期缺水缺光，叶子慢慢褪成浅黄绿色。淡白舌就是身体"营养供应"不足的信号。',
+       exp:'淡白舌主气血两虚或阳虚寒证，血液不能充分充盈舌体。'},
+
+      {t:'red',tl:'红舌（芒刺）',te:'Red Tongue with Prickles',
+       q:'这张舌头鲜红，舌面上还有小颗粒凸起（芒刺），提示什么？',
+       opts:['气血不足，需要补养','热邪内盛，内热炽烈','寒湿困脾，运化失常','肾精亏虚，髓海不足'],ans:1,
+       analogy:'像一锅快沸腾的水，热气上涌把锅盖顶起来冒泡——芒刺就是热气"顶起"舌乳头的表现。',
+       exp:'舌尖芒刺主心火旺；舌边芒刺主肝胆热盛；芒刺越多，热邪越重。'},
+
+      {t:'purple',tl:'紫暗舌',te:'Purple Tongue',
+       q:'舌色偏暗紫（紫暗舌），典型对应什么证型？',
+       opts:['湿热下注，膀胱有热','血瘀证 / 寒凝血滞','脾气虚弱，运化失职','外感表证，正邪相争'],ans:1,
+       analogy:'想象一根橡皮管被捏住——管里血流不通，颜色就变暗发紫。紫暗舌就是血液流通受阻的"颜色警报"。',
+       exp:'紫暗舌主血瘀证，常伴刺痛固定、皮肤瘀斑、脉涩。'}
+    ]
+  },
+  {
+    id: 2, lv: '二', cn: '舌苔辨证', en: 'TONGUE COAT',
+    qs: [
+      {t:'white_coat',tl:'薄白苔',te:'Thin White Coat',
+       q:'这是薄白苔——勉强能透过苔看到舌质，属于什么状态？',
+       opts:['胃气正常，或外感初期的表证','阳明热盛，邪热传里','湿热蕴结，苔腻如积粉','胃阴枯竭，无苔如镜'],ans:0,
+       analogy:'薄白苔像清晨凝结的薄霜——轻轻一吹就散，透明感强。身体"底子"干净，胃气正常。',
+       exp:'薄白苔是正常苔象；外感风寒初期邪尚在表，苔仍薄白。'},
+
+      {t:'yellow_coat',tl:'黄苔',te:'Yellow Coat',
+       q:'舌苔从白色变成了黄色，说明发生了什么变化？',
+       opts:['寒邪入里，阳气受损','热证 / 病邪入里化热','气血不足，阴津亏损','外感表证，尚未化热'],ans:1,
+       analogy:'像白布被热气熏染——白苔是原色布，黄苔是被"热邪"熏染后的结果。苔色越黄，热邪越重。',
+       exp:'黄苔是热证标志。淡黄代表轻热，深黄/焦黄代表热势较重。'},
+
+      {t:'thick_coat',tl:'厚白苔',te:'Thick White Coat',
+       q:'舌苔很厚，完全遮盖了舌质，多提示什么？',
+       opts:['邪气入深，湿浊食积停滞','阴虚内热，肾水不足','气血两虚，正气亏损','表证初起，正邪交争'],ans:0,
+       analogy:'把胃想象成一个房间：正常时干净整洁（薄苔）；积了很多杂物就堆得满满当当（厚苔）。',
+       exp:'厚苔代表病邪较盛，或内有痰饮、食积、湿浊停聚，运化失司。'},
+
+      {t:'yellow_coat',tl:'黄腻苔',te:'Yellow Greasy Coat',
+       q:'黄苔且苔质油腻厚浊（黄腻苔），最典型对应哪种证型？',
+       opts:['寒湿证，寒邪困脾','湿热证，湿热交阻','血虚证，营血不足','肺气虚，卫表不固'],ans:1,
+       analogy:'夏天厨房水槽：油渍（湿邪）遇热水（热邪），产生黄色油腻污垢。湿与热胶着在一起，难清除又彼此催化。',
+       exp:'黄腻苔是湿热证典型苔象。症状：口苦口黏、身热不扬、小便黄赤、大便黏腻。'},
+
+      {t:'no_coat',tl:'镜面舌（无苔）',te:'Mirror Tongue',
+       q:'舌面完全无苔，光滑如镜（镜面舌），说明什么？',
+       opts:['邪气化热入里，邪盛正旺','表证初起，正邪相当','胃气大伤、胃阴枯竭的危重信号','脾胃湿热，运化受阻'],ans:2,
+       analogy:'把胃气比作制造苔面的"工厂"——正常生产就有苔。镜面舌是工厂完全停产，连原材料都耗尽了。',
+       exp:'镜面舌提示胃气大伤、胃阴枯竭，常见于重病后期或慢性消耗性疾病。'}
+    ]
+  },
+  {
+    id: 3, lv: '三', cn: '舌形辨证', en: 'TONGUE SHAPE',
+    qs: [
+      {t:'fat',tl:'胖大舌',te:'Swollen Tongue',
+       q:'舌体比正常明显偏大偏胖（胖大舌），多提示——',
+       opts:['阴虚火旺','气虚或阳虚，水湿痰饮内停','血热妄行','肝气郁结'],ans:1,
+       analogy:'像被水泡过的木头——吸收太多水分（水湿），体积膨胀。胖大舌就是身体"水分代谢不良"的体现。',
+       exp:'胖大舌主脾虚湿盛或阳虚水泛，舌体因水湿停聚而胀大。'},
+
+      {t:'scalloped',tl:'齿痕舌',te:'Scalloped Tongue',
+       q:'舌边缘有牙齿压出的痕迹（齿痕），常和哪种舌象同时出现？',
+       opts:['绛舌','淡白胖大舌','红舌芒刺','紫暗舌'],ans:1,
+       analogy:'像软面团放在模具里——舌体软而水肿（气虚水湿），被牙齿一压就留下印记。',
+       exp:'齿痕舌多与胖大舌并见，主脾气虚弱，运化水湿无力。'}
+    ]
+  },
+  {
+    id: 4, lv: '四', cn: '综合辨证', en: 'COMPREHENSIVE',
+    qs: [
+      {t:'pale',tl:'淡白舌+齿痕',te:'Pale + Scalloped',
+       q:'舌头淡白、舌边有齿痕，舌体偏胖——综合判断是什么证型？',
+       opts:['气血两虚证','脾虚湿盛证','热入营血证','寒凝血滞证'],ans:1,
+       analogy:'舌头像被水泡过的软面团（胖大+齿痕），颜色又淡（淡白）——说明身体既"湿气重"又"能量不足"。',
+       exp:'淡白胖大齿痕舌 = 脾虚湿盛，或阳虚水泛。需健脾祛湿、温阳利水。'},
+
+      {t:'red',tl:'红舌+黄腻苔',te:'Red + Yellow Greasy Coat',
+       q:'舌红、苔黄腻——这个组合代表什么证型？',
+       opts:['湿热证','寒湿证','气虚证','血瘀证'],ans:0,
+       analogy:'舌质红=有热，苔黄腻=湿+热。就像厨房水池：既有油污（湿），又用热水冲（热），黄腻的污垢就牢牢粘在上面。',
+       exp:'红舌黄腻苔 = 湿热证。热邪与湿邪胶结，苔黄腻是湿热互结的典型表现。'},
+
+      {t:'crimson',tl:'绛舌+干裂',te:'Crimson + Cracked',
+       q:'舌色深红偏暗紫（绛舌），舌面干燥有裂纹，提示什么？',
+       opts:['湿热蕴结','阴虚火旺','气血两虚','寒凝血滞'],ans:1,
+       analogy:'想象一块被火烧过的土地：颜色暗红（绛），表面干裂——水分严重不足，属于"火热把水都烧干了"的状态。',
+       exp:'绛舌+干裂 = 阴虚火旺，热入营血，津液严重亏损，需滋阴降火。'},
+
+      {t:'purple',tl:'紫暗舌+瘀斑',te:'Purple + Stasis Spots',
+       q:'紫暗舌，舌面有瘀斑和瘀点，综合判断是——',
+       opts:['湿热证','阴虚火旺','血瘀证','气虚证'],ans:2,
+       analogy:'紫暗舌是"堵塞的管道"，瘀斑就像管道内壁的锈斑——血液循环不通畅，血液淤堵在某处形成斑点。',
+       exp:'紫暗舌+瘀斑 = 血瘀证。血流不畅，脉络痹阻，需活血化瘀。'}
+    ]
+  }
+];
+
+// ===== GAME STATE =====
+let G = {
+  xp: 0, unlocked: [1,2], done: [],
+  cur: null, qi: 0, correct: 0,
+  streak: 0, maxStreak: 0, answered: false
+};
+
+function loadState() {
+  try {
+    const s = localStorage.getItem('tcm_tongue_state');
+    if (s) { const d = JSON.parse(s); G.xp = d.xp||0; G.done = d.done||[]; G.unlocked = d.unlocked||[1,2]; }
+  } catch(e) {}
+}
+function saveState() {
+  try { localStorage.setItem('tcm_tongue_state', JSON.stringify({xp:G.xp,done:G.done,unlocked:G.unlocked})); } catch(e) {}
+}
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// Level list
+function renderLevels() {
+  const el = document.getElementById('level-list');
+  el.innerHTML = '';
+  DATA.forEach(d => {
+    const isDone = G.done.includes(d.id);
+    const isUnlocked = G.unlocked.includes(d.id);
+    const isLocked = !isDone && !isUnlocked;
+    const card = document.createElement('div');
+    card.className = 'level-card' + (isDone?' done':'') + (isLocked?' locked':'');
+    card.onclick = () => { if(!isLocked && !isDone) startLesson(d.id); else if(isDone) startLesson(d.id); };
+    card.innerHTML = `
+      <div class="lv-num">${d.lv}</div>
+      <div class="lv-info">
+        <div class="lv-cn">${d.cn}</div>
+        <div class="lv-en">${d.en}</div>
+      </div>
+      <div class="lv-status ${isDone?'done':isUnlocked?'open':'lock'}">
+        ${isDone?'完成':isUnlocked?'开始':'🔒'}
+      </div>
+      <div class="lv-stripe"></div>
+    `;
+    el.appendChild(card);
+  });
+  document.getElementById('xp-display').textContent = G.xp + ' XP';
+}
+
+// Start lesson
+function startLesson(id) {
+  G.cur = id;
+  G.qi = 0;
+  G.correct = 0;
+  G.streak = 0;
+  G.maxStreak = 0;
+  show('s-lesson');
+  document.getElementById('know-card').classList.remove('show');
+  document.getElementById('next-btn').classList.remove('show');
+  renderQ();
+}
+
+function renderQ() {
+  const d = DATA.find(x=>x.id===G.cur);
+  const q = d.qs[G.qi];
+  G.answered = false;
+
+  document.getElementById('q-count').textContent = `${G.qi+1}/${d.qs.length}`;
+  document.getElementById('prog-fill').style.width = ((G.qi)/(d.qs.length)*100)+'%';
+
+  document.getElementById('t-label').textContent = q.tl;
+  document.getElementById('t-en').textContent = q.te;
+  document.getElementById('tongue-svg').innerHTML = T[q.t] || T.normal;
+
+  document.getElementById('q-text').textContent = q.q;
+
+  const optsEl = document.getElementById('opt-list');
+  optsEl.innerHTML = '';
+  const labels = ['A','B','C','D'];
+  q.opts.forEach((opt,i)=>{
+    const div = document.createElement('div');
+    div.className = 'opt-item';
+    div.dataset.i = i;
+    div.innerHTML = `<div class="opt-key">${labels[i]}</div><div class="opt-text">${opt}</div>`;
+    div.onclick = () => selectOpt(i);
+    optsEl.appendChild(div);
+  });
+
+  document.getElementById('know-card').classList.remove('show');
+  document.getElementById('next-btn').classList.remove('show');
+}
+
+function selectOpt(i) {
+  if(G.answered) return;
+  G.answered = true;
+  const d = DATA.find(x=>x.id===G.cur);
+  const q = d.qs[G.qi];
+  const isCorrect = i === q.ans;
+
+  document.querySelectorAll('.opt-item').forEach(el=>{
+    el.classList.add('disabled');
+    const idx = parseInt(el.dataset.i);
+    if(idx === q.ans) el.classList.add('correct');
+    else if(idx === i && !isCorrect) el.classList.add('wrong');
+  });
+
+  if(isCorrect) {
+    G.correct++;
+    G.streak++;
+    if(G.streak > G.maxStreak) G.maxStreak = G.streak;
+    G.xp += 12;
+  } else {
+    G.streak = 0;
+  }
+
+  // Knowledge card
+  const kc = document.getElementById('know-card');
+  kc.classList.add('show');
+  document.getElementById('k-icon').textContent = isCorrect?'✅':'❌';
+  const kr = document.getElementById('k-result');
+  kr.textContent = isCorrect?'回答正确！':'回答错误~';
+  kr.className = 'know-result ' + (isCorrect?'ok':'fail');
+  document.getElementById('k-analogy').textContent = q.analogy;
+  document.getElementById('k-exp').textContent = '📖 ' + q.exp;
+
+  // Show next button
+  const isLast = G.qi >= d.qs.length - 1;
+  const nb = document.getElementById('next-btn');
+  nb.textContent = isLast?'查看成绩 →':'继续答题 →';
+  nb.classList.add('show');
+
+  document.getElementById('xp-display').textContent = G.xp + ' XP';
+}
+
+function nextQ() {
+  const d = DATA.find(x=>x.id===G.cur);
+  if(G.qi < d.qs.length - 1) {
+    G.qi++;
+    renderQ();
+  } else {
+    showComplete();
+  }
+}
+
+function showComplete() {
+  const d = DATA.find(x=>x.id===G.cur);
+  const total = d.qs.length;
+  const pct = G.correct / total;
+  const stars = pct >= 1 ? 3 : pct >= 0.6 ? 2 : 1;
+  const bonus = stars === 3 ? 30 : stars === 2 ? 20 : 10;
+  G.xp += bonus;
+
+  if(!G.done.includes(G.cur)) {
+    G.done.push(G.cur);
+    const nextId = G.cur + 1;
+    if(nextId <= DATA.length && !G.unlocked.includes(nextId)) {
+      G.unlocked.push(nextId);
+    }
+  }
+  saveState();
+
+  show('s-complete');
+  document.getElementById('complete-title').textContent = stars===3?'🌟 满分通关！':'通关成功！';
+
+  const sr = document.getElementById('stars-row');
+  sr.innerHTML = '';
+  for(let i=0;i<3;i++) {
+    const s = document.createElement('div');
+    s.className = 'star' + (i<stars?' lit':'');
+    s.textContent = i<stars?'⭐':'☆';
+    sr.appendChild(s);
+  }
+
+  document.getElementById('stat-correct').textContent = G.correct+'/'+total;
+  document.getElementById('stat-xp').textContent = G.xp;
+  document.getElementById('stat-streak').textContent = G.maxStreak;
+
+  // Trophies
+  const tr = document.getElementById('trophy-row');
+  tr.innerHTML = '';
+  if(pct >= 1) {
+    const t = document.createElement('div'); t.className='trophy'; t.textContent='🏆 完美答题';
+    tr.appendChild(t);
+  }
+  if(G.maxStreak >= 3) {
+    const t = document.createElement('div'); t.className='trophy'; t.textContent='🔥 连击高手';
+    tr.appendChild(t);
+  }
+  if(G.xp >= 60) {
+    const t = document.createElement('div'); t.className='trophy'; t.textContent='💎 积分达人';
+    tr.appendChild(t);
+  }
+
+  document.getElementById('xp-display').textContent = G.xp + ' XP';
+}
+
+function goHome() {
+  renderLevels();
+  show('s-home');
+}
+
+loadState();
+renderLevels();
+</script>
+</body>
+</html>

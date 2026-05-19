@@ -1,0 +1,425 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=IM+Fell+English:ital@0;1&family=Space+Grotesk:wght@300;400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+--pa:#f0ece2;--pa2:#e8e3d5;--pa3:#ddd8c8;
+--mo:#5a6642;--mo2:#7a8a5a;--mo3:#9aaa7a;--mol:#c8d4a8;--moll:#eaf0d8;--moxl:#f4f7ec;
+--ik:#2a2620;--ik2:#4a4438;--ik3:#8a8070;
+--sa:#b8a870;--sal:#e0d4a8;--sall:#f5f0e0;
+--ru:#7a3828;--cr:#f8f5ee;
+}
+html,body{background:var(--pa);font-family:'Space Grotesk',sans-serif;color:var(--ik);}
+.scr{display:none;min-height:100vh;}
+.scr.act{display:block;}
+.hdr{background:var(--pa2);border-bottom:1px solid var(--pa3);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;}
+.logo{display:flex;align-items:flex-end;gap:8px;}
+.logo-cn{font-family:'Noto Serif SC',serif;font-size:18px;font-weight:700;color:var(--mo);letter-spacing:2px;}
+.logo-sub{display:flex;flex-direction:column;justify-content:flex-end;gap:1px;}
+.logo-ast{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;color:var(--mo3);letter-spacing:1px;}
+.logo-en{font-family:'IM Fell English',serif;font-style:italic;font-size:9px;color:var(--mo2);letter-spacing:1.5px;}
+.xp-tag{font-size:11px;color:var(--mo);border:1px solid var(--mol);padding:3px 10px;letter-spacing:1px;}
+.nav{display:flex;background:var(--pa2);border-bottom:1px solid var(--pa3);}
+.nbt{flex:1;padding:9px 2px;font-size:11px;font-family:'Noto Serif SC',serif;color:var(--ik3);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;letter-spacing:.3px;}
+.nbt.on{color:var(--mo);border-bottom-color:var(--mo);font-weight:600;}
+.hero{padding:22px 20px 6px;position:relative;overflow:hidden;background:var(--pa);}
+.hero-ov{font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:var(--ik3);letter-spacing:2px;margin-bottom:6px;}
+.hero-t{font-family:'Noto Serif SC',serif;font-size:26px;font-weight:700;color:var(--ik);line-height:1.2;}
+.hero-t em{color:var(--mo);font-style:normal;}
+.hero-s{font-family:'IM Fell English',serif;font-style:italic;font-size:13px;color:var(--ik3);margin-top:6px;line-height:1.7;}
+.prog-row{display:flex;align-items:center;gap:10px;padding:14px 0 16px;border-top:1px solid var(--pa3);margin-top:16px;}
+.po{flex:1;height:2px;background:var(--pa3);}
+.pi{height:100%;background:var(--mo);transition:width .4s;}
+.pl{font-size:11px;color:var(--ik3);white-space:nowrap;}
+.sec{padding:16px 20px 8px;display:flex;align-items:baseline;gap:10px;}
+.scn{font-family:'Noto Serif SC',serif;font-size:12px;font-weight:600;color:var(--ik2);letter-spacing:.5px;}
+.sce{font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:var(--ik3);}
+.scr2{flex:1;height:1px;background:var(--pa3);}
+.scpill{font-size:10px;color:var(--mo2);background:var(--moxl);border:1px solid var(--mol);padding:2px 8px;}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px 4px;}
+.mc{background:var(--cr);border:1px solid var(--pa3);padding:14px 12px 12px;cursor:pointer;position:relative;}
+.mc:hover:not(.lk){border-color:var(--mol);}
+.mc.lk{opacity:.42;cursor:default;}
+.mbar{height:2px;background:var(--mo);margin-bottom:10px;}
+.mc.lk .mbar{background:var(--pa3);}
+.mcn{font-family:'Noto Serif SC',serif;font-size:13px;font-weight:600;color:var(--ik);}
+.men{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;color:var(--ik3);margin-top:1px;}
+.mst{margin-top:8px;font-size:10px;}
+.mst.on{color:var(--mo);}
+.mst.off{color:var(--ik3);}
+.daily{margin:0 20px 4px;background:var(--mo);padding:16px;cursor:pointer;position:relative;overflow:hidden;}
+.dbg{position:absolute;right:-4px;bottom:-8px;font-family:'IM Fell English',serif;font-style:italic;font-size:52px;color:rgba(255,255,255,.07);pointer-events:none;line-height:1;}
+.dcn{font-family:'Noto Serif SC',serif;font-size:14px;font-weight:600;color:#f0ece2;letter-spacing:.5px;}
+.den{font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:var(--mol);margin-top:3px;}
+.dm{font-size:11px;color:var(--mol);margin-top:8px;opacity:.8;}
+.darr{color:var(--mol);font-size:13px;margin-top:8px;}
+.lvl{padding:0 20px;display:flex;flex-direction:column;gap:8px;}
+.lvc{background:var(--cr);border:1px solid var(--pa3);padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;position:relative;}
+.lvc:hover:not(.lk){border-color:var(--mol);}
+.lvc.dn{border-color:var(--mol);}
+.lvc.lk{opacity:.42;cursor:default;}
+.lvacc{position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--mo);}
+.lvc.lk .lvacc{background:var(--pa3);}
+.lvc.dn .lvacc{background:var(--mo2);}
+.lvn{width:34px;height:34px;border:1px solid var(--pa3);display:flex;align-items:center;justify-content:center;font-family:'Noto Serif SC',serif;font-size:13px;font-weight:700;color:var(--ik2);flex-shrink:0;}
+.lvc.dn .lvn{border-color:var(--mol);color:var(--mo);}
+.lvcn{font-family:'Noto Serif SC',serif;font-size:13px;font-weight:600;color:var(--ik);}
+.lven{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;color:var(--ik3);margin-top:1px;}
+.lvmt{font-size:11px;color:var(--ik3);margin-top:3px;}
+.lvbg{margin-left:auto;font-size:10px;padding:3px 9px;flex-shrink:0;letter-spacing:.3px;}
+.lvbg.op{color:var(--mo);border:1px solid var(--mol);background:var(--moxl);}
+.lvbg.dn2{color:var(--mo);border:1px solid var(--mol);background:var(--moxl);}
+.lvbg.lk2{color:var(--ik3);border:1px solid var(--pa3);}
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px 20px;}
+.rc{background:var(--cr);border:1px solid var(--pa3);padding:14px 12px;cursor:pointer;}
+.rc:hover{border-color:var(--mol);}
+.rdec{font-family:'IM Fell English',serif;font-size:18px;color:var(--mo3);line-height:1;opacity:.5;}
+.rcn{font-family:'Noto Serif SC',serif;font-size:12px;font-weight:600;color:var(--ik);margin-top:4px;line-height:1.4;}
+.rtag{display:inline-block;font-size:10px;color:var(--mo);background:var(--moxl);border:1px solid var(--mol);padding:2px 7px;margin-top:6px;}
+.lhdr{background:var(--pa2);border-bottom:1px solid var(--pa3);padding:10px 16px;display:flex;align-items:center;gap:10px;}
+.bkbt{background:none;border:1px solid var(--pa3);padding:5px 10px;font-size:11px;cursor:pointer;color:var(--ik2);letter-spacing:.5px;}
+.ltit{font-family:'Noto Serif SC',serif;font-size:12px;font-weight:600;color:var(--ik2);letter-spacing:.5px;}
+.qpct{margin-left:auto;font-size:11px;color:var(--ik3);}
+.pstrip{height:2px;background:var(--pa3);}
+.psfill{height:100%;background:var(--mo);transition:width .3s;}
+.strow{padding:10px 20px;display:flex;align-items:center;gap:8px;}
+.stlbl{font-family:'IM Fell English',serif;font-style:italic;font-size:11px;color:var(--ik3);}
+.pips{display:flex;gap:5px;}
+.pp{width:7px;height:7px;border-radius:50%;background:var(--pa3);}
+.pp.on{background:var(--mo);}
+.ifrm{margin:0 20px 14px;background:var(--pa2);border:1px solid var(--pa3);position:relative;padding:22px 16px;display:flex;justify-content:center;align-items:center;min-height:140px;}
+.fc{position:absolute;width:12px;height:12px;}
+.ftl{top:6px;left:6px;border-top:1px solid var(--mo3);border-left:1px solid var(--mo3);}
+.ftr{top:6px;right:6px;border-top:1px solid var(--mo3);border-right:1px solid var(--mo3);}
+.fbl{bottom:6px;left:6px;border-bottom:1px solid var(--mo3);border-left:1px solid var(--mo3);}
+.fbr{bottom:6px;right:6px;border-bottom:1px solid var(--mo3);border-right:1px solid var(--mo3);}
+.icn{position:absolute;top:7px;left:12px;font-family:'Noto Serif SC',serif;font-size:11px;color:var(--ik3);}
+.ien{position:absolute;bottom:7px;right:12px;font-family:'IM Fell English',serif;font-style:italic;font-size:10px;color:var(--ik3);}
+.qwrap{padding:0 20px;}
+.qtxt{font-family:'Noto Serif SC',serif;font-size:15px;line-height:1.7;color:var(--ik);margin-bottom:14px;}
+.opts{display:flex;flex-direction:column;gap:7px;}
+.obt{background:var(--cr);border:1px solid var(--pa3);padding:11px 14px;text-align:left;font-size:12px;font-family:'Noto Serif SC',serif;cursor:pointer;display:flex;align-items:flex-start;gap:10px;transition:all .15s;line-height:1.55;}
+.obt:hover:not(.ds){background:var(--moxl);border-color:var(--mol);}
+.okey{width:19px;height:19px;border:1px solid var(--pa3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--ik3);flex-shrink:0;margin-top:1px;}
+.obt.ok{background:var(--moxl);border-color:var(--mol);}
+.obt.ok .okey{background:var(--mo);border-color:var(--mo);color:#fff;}
+.obt.er{background:#f5ece8;border-color:#c09080;}
+.obt.er .okey{background:var(--ru);border-color:var(--ru);color:#fff;}
+.obt.ds{cursor:default;}
+.kcd{margin:14px 20px 0;background:var(--cr);border:1px solid var(--pa3);display:none;}
+.kcd.sh{display:block;}
+.kchdr{background:var(--pa2);padding:8px 14px;border-bottom:1px solid var(--pa3);display:flex;align-items:center;gap:6px;}
+.kchn{font-family:'Noto Serif SC',serif;font-size:11px;font-weight:600;color:var(--ik2);}
+.kche{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;color:var(--ik3);}
+.kcrs{padding:10px 14px 0;display:flex;align-items:center;gap:8px;}
+.kcic{font-size:14px;}
+.kcrt{font-family:'Noto Serif SC',serif;font-size:13px;font-weight:600;}
+.kcrt.ok{color:var(--mo);}
+.kcrt.er{color:var(--ru);}
+.kcbd{padding:10px 14px 14px;}
+.kcan{background:var(--sall);border-left:2px solid var(--sa);padding:8px 12px;margin-bottom:8px;font-size:12px;line-height:1.7;color:var(--ik2);}
+.kcatg{display:block;font-family:'IM Fell English',serif;font-style:italic;font-size:10px;color:var(--sa);margin-bottom:3px;letter-spacing:.5px;}
+.kcex{font-size:12px;color:var(--ik3);line-height:1.7;}
+.nxtbt{display:block;width:calc(100% - 40px);margin:14px 20px 20px;background:var(--mo);color:#f0ece2;border:none;padding:13px;font-family:'Noto Serif SC',serif;font-size:14px;font-weight:600;cursor:pointer;letter-spacing:.5px;}
+.cmhdr{background:var(--pa2);border-bottom:1px solid var(--pa3);padding:20px;text-align:center;}
+.cmen{font-family:'IM Fell English',serif;font-style:italic;font-size:22px;color:var(--mo);}
+.cmcn{font-family:'Noto Serif SC',serif;font-size:11px;color:var(--ik3);margin-top:3px;letter-spacing:2px;}
+.cmbd{padding:20px;}
+.strs{display:flex;justify-content:center;gap:10px;margin-bottom:18px;}
+.stbx{width:46px;height:46px;border:1px solid var(--pa3);display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--cr);}
+.stbx.lt{border-color:var(--sa);background:var(--sall);}
+.sgrd{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.stb{background:var(--pa2);border:1px solid var(--pa3);padding:12px 8px;text-align:center;}
+.stn{font-family:'IM Fell English',serif;font-size:24px;color:var(--mo);}
+.stlb{font-size:10px;color:var(--ik3);letter-spacing:.5px;margin-top:2px;}
+.trps{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:16px;}
+.trp{background:var(--pa2);border:1px solid var(--pa3);padding:4px 10px;font-size:11px;color:var(--ik2);font-family:'Noto Serif SC',serif;}
+.hmbt{width:100%;background:var(--ik);color:var(--pa);border:none;padding:13px;font-family:'Noto Serif SC',serif;font-size:14px;font-weight:600;cursor:pointer;letter-spacing:.5px;margin-bottom:8px;}
+.rtbt{width:100%;background:none;border:1px solid var(--pa3);padding:11px;font-family:'Noto Serif SC',serif;font-size:13px;cursor:pointer;color:var(--ik2);}
+</style>
+
+<div id="s0" class="scr act">
+  <div class="hdr">
+    <div class="logo">
+      <div class="logo-cn">大米</div>
+      <div class="logo-sub">
+        <div class="logo-ast">* pure as natural</div>
+        <div class="logo-en">DA MI · HEALTH</div>
+      </div>
+    </div>
+    <div class="xp-tag" id="xpd">0 XP</div>
+  </div>
+  <div class="nav">
+    <button class="nbt on" onclick="stab(this,'t0')">学习地图</button>
+    <button class="nbt" onclick="stab(this,'t1')">舌诊</button>
+    <button class="nbt" onclick="stab(this,'t2')">面诊</button>
+    <button class="nbt" onclick="stab(this,'t3')">速查</button>
+  </div>
+
+  <div id="t0">
+    <div class="hero">
+      <svg style="position:absolute;right:0;top:0;opacity:.11;pointer-events:none" width="110" height="170" viewBox="0 0 110 170"><path d="M55 170 C55 130 50 110 46 82 C42 54 28 36 18 8" fill="none" stroke="#5a6642" stroke-width="1"/><path d="M46 82 C56 72 70 68 86 64" fill="none" stroke="#5a6642" stroke-width=".7"/><path d="M50 112 C62 104 76 100 90 104" fill="none" stroke="#5a6642" stroke-width=".6"/><circle cx="18" cy="8" r="2" fill="#5a6642" opacity=".5"/><circle cx="86" cy="64" r="1.5" fill="#5a6642" opacity=".4"/><circle cx="90" cy="104" r="1.5" fill="#5a6642" opacity=".35"/></svg>
+      <div class="hero-ov">* 养于身 · 安于心</div>
+      <div class="hero-t">观舌<em>识面</em><br>中医入门</div>
+      <div class="hero-s">Pure as natural — 舌诊 · 面诊 · 经络 · 体质</div>
+      <div class="prog-row">
+        <div class="po"><div class="pi" id="gp" style="width:8%"></div></div>
+        <div class="pl" id="gpl">1 / 12 关</div>
+      </div>
+    </div>
+    <div class="sec"><div class="scn">四大学习模块</div><div class="sce">core modules</div><div class="scr2"></div></div>
+    <div class="mgrid">
+      <div class="mc" onclick="otab('t1')"><div class="mbar"></div><svg width="40" height="32" viewBox="0 0 40 32" style="display:block;margin-bottom:8px"><ellipse cx="20" cy="20" rx="14" ry="10" fill="#5a6642" opacity=".22"/><ellipse cx="20" cy="17" rx="10" ry="7" fill="#5a6642" opacity=".15"/><path d="M8 13 Q20 4 32 13" fill="none" stroke="#5a6642" stroke-width=".9" opacity=".4"/></svg><div class="mcn">舌诊</div><div class="men">tongue diagnosis</div><div class="mst on">进行中 · 4关</div></div>
+      <div class="mc" onclick="otab('t2')"><div class="mbar"></div><svg width="40" height="32" viewBox="0 0 40 32" style="display:block;margin-bottom:8px"><ellipse cx="20" cy="18" rx="14" ry="12" fill="#5a6642" opacity=".2"/><ellipse cx="13" cy="15" rx="3" ry="2" fill="#2a2620" opacity=".3"/><ellipse cx="27" cy="15" rx="3" ry="2" fill="#2a2620" opacity=".3"/><path d="M13 23 Q20 27 27 23" fill="none" stroke="#7a3828" stroke-width="1"/></svg><div class="mcn">面诊</div><div class="men">face diagnosis</div><div class="mst on">开放 · 3关</div></div>
+      <div class="mc lk"><div class="mbar"></div><svg width="40" height="32" viewBox="0 0 40 32" style="display:block;margin-bottom:8px"><path d="M6 20 Q14 8 20 16 Q26 24 34 12" fill="none" stroke="#5a6642" stroke-width=".9" opacity=".3"/></svg><div class="mcn">经络穴位</div><div class="men">meridians</div><div class="mst off">— 解锁中</div></div>
+      <div class="mc lk"><div class="mbar"></div><svg width="40" height="32" viewBox="0 0 40 32" style="display:block;margin-bottom:8px"><path d="M20 4 L28 16 L20 28 L12 16 Z" fill="#5a6642" opacity=".15" stroke="#5a6642" stroke-width=".7"/></svg><div class="mcn">体质辨识</div><div class="men">constitution</div><div class="mst off">— 解锁中</div></div>
+    </div>
+    <div class="sec" style="margin-top:8px;"><div class="scn">今日练习</div><div class="sce">daily drill</div><div class="scr2"></div><div class="scpill">5题</div></div>
+    <div class="daily" onclick="go(99)">
+      <div class="dbg">daily</div>
+      <div class="dcn">每日刷题 · 综合练习</div>
+      <div class="den">* having temperature makes it healthier</div>
+      <div class="dm">随机出题 · 防遗忘强化</div>
+      <div class="darr">→ 开始练习</div>
+    </div>
+    <div style="height:20px"></div>
+  </div>
+
+  <div id="t1" style="display:none">
+    <div class="hero" style="padding-bottom:16px;">
+      <div class="hero-ov">* Chapter 01</div>
+      <div class="hero-t" style="font-size:24px;">观舌<em>辨证</em></div>
+      <div class="hero-s">tongue diagnosis · 从舌色到综合辨证</div>
+      <div style="height:10px"></div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="lvl" id="tlv">
+      <div class="lvc" onclick="go(1)" id="lc1"><div class="lvacc"></div><div class="lvn" id="ln1">一</div><div><div class="lvcn">舌色辨证</div><div class="lven">tongue color</div><div class="lvmt">6题 · 淡白 红 绛 紫暗</div></div><div class="lvbg op" id="lb1">开始</div></div>
+      <div class="lvc" onclick="go(2)" id="lc2"><div class="lvacc"></div><div class="lvn" id="ln2">二</div><div><div class="lvcn">舌苔辨证</div><div class="lven">tongue coat</div><div class="lvmt">5题 · 白苔 黄苔 厚苔 无苔</div></div><div class="lvbg op" id="lb2">开始</div></div>
+      <div class="lvc lk" id="lc3"><div class="lvacc"></div><div class="lvn" id="ln3">三</div><div><div class="lvcn">舌形舌态</div><div class="lven">shape and motion</div><div class="lvmt">4题 · 胖大 齿痕 裂纹</div></div><div class="lvbg lk2" id="lb3">— 锁定</div></div>
+      <div class="lvc lk" id="lc4"><div class="lvacc"></div><div class="lvn" id="ln4">四</div><div><div class="lvcn">综合辨证挑战</div><div class="lven">comprehensive</div><div class="lvmt">8题 · 混合舌象分析</div></div><div class="lvbg lk2" id="lb4">— 锁定</div></div>
+    </div>
+    <div style="height:16px"></div>
+  </div>
+
+  <div id="t2" style="display:none">
+    <div class="hero" style="padding-bottom:16px;">
+      <div class="hero-ov">* Chapter 02</div>
+      <div class="hero-t" style="font-size:24px;">望色<em>察神</em></div>
+      <div class="hero-s">face diagnosis · 五色主病 · 分区望诊</div>
+      <div style="height:10px"></div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="lvl">
+      <div class="lvc" onclick="go(10)"><div class="lvacc"></div><div class="lvn">一</div><div><div class="lvcn">五色主病</div><div class="lven">five colors</div><div class="lvmt">5题 · 青赤黄白黑</div></div><div class="lvbg op">开始</div></div>
+      <div class="lvc lk"><div class="lvacc"></div><div class="lvn">二</div><div><div class="lvcn">面部分区望诊</div><div class="lven">face zones</div><div class="lvmt">5题 · 额鼻颊口周下颌</div></div><div class="lvbg lk2">— 锁定</div></div>
+      <div class="lvc lk"><div class="lvacc"></div><div class="lvn">三</div><div><div class="lvcn">气色综合判断</div><div class="lven">complexion</div><div class="lvmt">6题 · 晦荣泽枯</div></div><div class="lvbg lk2">— 锁定</div></div>
+    </div>
+    <div style="height:16px"></div>
+  </div>
+
+  <div id="t3" style="display:none">
+    <div style="height:12px"></div>
+    <div class="sec"><div class="scn">知识速查</div><div class="sce">quick reference</div><div class="scr2"></div></div>
+    <div class="rgrid">
+      <div class="rc" onclick="sendPrompt('帮我列出舌色与证型的对照速查表，每种舌色配一个生活比喻')"><div class="rdec">*</div><div class="rcn">舌色证型速查</div><div class="rtag">舌诊</div></div>
+      <div class="rc" onclick="sendPrompt('帮我用生活化方式解释面部五色主病，适合零基础理解')"><div class="rdec">*</div><div class="rcn">面色五色主病</div><div class="rtag">面诊</div></div>
+      <div class="rc" onclick="sendPrompt('帮我整理九种体质特征和养生建议，适合中医零基础')"><div class="rdec">*</div><div class="rcn">九种体质辨识</div><div class="rtag">体质</div></div>
+      <div class="rc" onclick="sendPrompt('列出日常保健最实用的10个穴位，包括取穴方法和主要作用')"><div class="rdec">*</div><div class="rcn">日常保健穴位</div><div class="rtag">经络</div></div>
+      <div class="rc" onclick="sendPrompt('帮我解释脾虚的常见表现，以及对应的食养调理方案')"><div class="rdec">*</div><div class="rcn">脾虚食养指南</div><div class="rtag">食养</div></div>
+      <div class="rc" onclick="sendPrompt('中医望舌时有哪些常见误区？饮食影响、光线影响等注意事项')"><div class="rdec">*</div><div class="rcn">望诊注意事项</div><div class="rtag">实践</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="s1" class="scr">
+  <div class="lhdr">
+    <button class="bkbt" onclick="gh()">← 返回</button>
+    <div class="ltit" id="ltit">舌色辨证</div>
+    <div class="qpct" id="qpct">1 / 6</div>
+  </div>
+  <div class="pstrip"><div class="psfill" id="lp" style="width:16%"></div></div>
+  <div class="strow">
+    <div class="stlbl">* streak 连击</div>
+    <div class="pips" id="pips">
+      <div class="pp" id="p0"></div><div class="pp" id="p1"></div><div class="pp" id="p2"></div>
+      <div class="pp" id="p3"></div><div class="pp" id="p4"></div>
+    </div>
+  </div>
+  <div class="ifrm">
+    <div class="fc ftl"></div><div class="fc ftr"></div><div class="fc fbl"></div><div class="fc fbr"></div>
+    <div class="icn" id="tcn">舌象</div>
+    <div id="tsvg"></div>
+    <div class="ien" id="ten">tongue</div>
+  </div>
+  <div class="qwrap">
+    <div class="qtxt" id="qtxt"></div>
+    <div class="opts" id="opts"></div>
+  </div>
+  <div class="kcd" id="kcd">
+    <div class="kchdr"><span class="kchn">知识点</span><span class="kche" style="margin-left:6px">knowledge card</span></div>
+    <div class="kcrs"><span class="kcic" id="kico">*</span><span class="kcrt" id="krt"></span></div>
+    <div class="kcbd">
+      <div class="kcan"><span class="kcatg">* 具象比喻 analogy</span><span id="kana"></span></div>
+      <div class="kcex" id="kex"></div>
+    </div>
+  </div>
+  <button class="nxtbt" id="nxtbt" onclick="nq()" style="display:none">下一题 →</button>
+</div>
+
+<div id="s2" class="scr">
+  <div class="cmhdr">
+    <div class="cmen">* level complete</div>
+    <div class="cmcn" id="cmcn">舌色辨证 · 完成</div>
+  </div>
+  <div class="cmbd">
+    <div class="strs"><div class="stbx" id="s1b">★</div><div class="stbx" id="s2b">★</div><div class="stbx" id="s3b">★</div></div>
+    <div class="sgrd">
+      <div class="stb"><div class="stn" id="sco">5/6</div><div class="stlb">答对</div></div>
+      <div class="stb"><div class="stn" id="sxp">72</div><div class="stlb">XP</div></div>
+      <div class="stb"><div class="stn" id="sst">3</div><div class="stlb">连击</div></div>
+    </div>
+    <div class="trps" id="trps"></div>
+    <button class="hmbt" onclick="gh()">返回学习地图</button>
+    <button class="rtbt" onclick="rl()">再刷一遍 · retry</button>
+  </div>
+</div>
+
+<script>
+const TV={
+  normal:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="72" rx="37" ry="49" fill="#a07868" opacity=".7"/><ellipse cx="70" cy="60" rx="27" ry="31" fill="#906858" opacity=".3"/><path d="M53 40 Q70 21 87 40" fill="none" stroke="#806050" stroke-width="1.5" opacity=".35"/></svg>',
+  pale:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="72" rx="37" ry="49" fill="#ddd0c8"/><ellipse cx="70" cy="60" rx="27" ry="31" fill="#cdc0b8" opacity=".4"/></svg>',
+  red:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="72" rx="37" ry="49" fill="#903030"/><circle cx="58" cy="52" r="2.5" fill="#501010"/><circle cx="70" cy="46" r="2.5" fill="#501010"/><circle cx="82" cy="52" r="2.5" fill="#501010"/><circle cx="64" cy="60" r="2" fill="#501010"/></svg>',
+  crimson:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="72" rx="37" ry="49" fill="#681540"/></svg>',
+  purple:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="72" rx="37" ry="49" fill="#3e3460"/></svg>',
+  white_coat:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="72" rx="37" ry="49" fill="#a07868" opacity=".7"/><ellipse cx="70" cy="72" rx="33" ry="45" fill="#ede8e0" opacity=".9"/></svg>',
+  yellow_coat:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="72" rx="37" ry="49" fill="#a07868" opacity=".7"/><ellipse cx="70" cy="72" rx="33" ry="45" fill="#b89028" opacity=".78"/></svg>',
+  thick_coat:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="72" rx="37" ry="49" fill="#a07868"/><ellipse cx="70" cy="72" rx="33" ry="45" fill="#e0dcd0" opacity=".92"/><rect x="50" y="56" width="5" height="2.5" rx="1" fill="#c0b8a0" opacity=".7"/><rect x="62" y="52" width="5" height="2.5" rx="1" fill="#c0b8a0" opacity=".7"/><rect x="74" y="56" width="5" height="2.5" rx="1" fill="#c0b8a0" opacity=".7"/></svg>',
+  no_coat:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="72" rx="37" ry="49" fill="#681540"/></svg>',
+  face:'<svg viewBox="0 0 140 130" width="108" height="98"><ellipse cx="70" cy="68" rx="40" ry="48" fill="#c8a070" opacity=".6"/><ellipse cx="54" cy="52" rx="5" ry="2.5" fill="#3a3020" opacity=".55"/><ellipse cx="86" cy="52" rx="5" ry="2.5" fill="#3a3020" opacity=".55"/><path d="M60 82 Q70 90 80 82" fill="none" stroke="#8a5030" stroke-width="1.8"/></svg>'
+};
+const DB={
+  1:{t:'舌色辨证',q:[
+    {k:'normal',cn:'淡红舌',en:'Normal Tongue',q:'这是一条淡红舌，代表什么状态？',o:['气血调和，属正常健康','气血不足，阳气虚衰','热邪入里，炎热内盛','血脉瘀阻，运行不畅'],a:0,ana:'就像水龙头出水量刚好：不是细细的涓流，也不是喷涌的热水，水温正常、水量充足。',ex:'淡红舌是气血充足、阴阳平衡的表现，是健康的基准舌象。'},
+    {k:'pale',cn:'淡白舌',en:'Pale Tongue',q:'这条舌头颜色比正常偏淡，几乎接近白色，称为——',o:['红舌','淡白舌','绛舌','青紫舌'],a:1,ana:'想象一盆植物因缺水缺光，叶子褪成浅黄绿色。淡白舌就是身体营养供应不足的表现。',ex:'淡白舌主气血两虚或阳虚寒证，血液不能充分充盈舌体。'},
+    {k:'red',cn:'红舌（芒刺）',en:'Red Tongue',q:'舌鲜红且舌面有小颗粒凸起（芒刺），提示什么？',o:['气血不足，需要补益','热邪亢盛，内热炽烈','寒湿内困，脾阳受损','肾精亏虚，髓海不足'],a:1,ana:'就像一锅快沸腾的水，热气顶起锅盖冒泡——芒刺就是热气顶起舌乳头的具象表现。',ex:'舌尖芒刺→心火旺；舌边芒刺→肝胆热盛；越热芒刺越多。'},
+    {k:'crimson',cn:'绛舌',en:'Crimson Tongue',q:'绛舌（深红偏暗紫）比红舌热象更重，常见于哪种情况？',o:['普通外感风寒初起','温病热邪入营血或阴虚火旺','食积停滞，胃气不和','痰湿困脾，运化失常'],a:1,ana:'红舌是门口着火，绛舌是火已经烧进了房间深处（营血层）。越深颜色越暗。',ex:'绛舌是热入营血的标志，提示病已深入；也见于阴虚火旺慢性损耗。'},
+    {k:'purple',cn:'紫暗舌',en:'Purple Tongue',q:'紫暗舌（偏暗紫、青紫色）是什么的典型舌象？',o:['湿热下注，膀胱有热','血瘀证或寒凝血滞','脾气虚弱，运化失职','外感表证，正邪相争'],a:1,ana:'想象橡皮管被捏住——管里的水流不动，颜色就会变暗变紫。紫暗舌是血液流通受阻的信号。',ex:'紫暗舌主血瘀证，常伴刺痛固定、皮肤瘀斑、脉涩。'},
+    {k:'pale',cn:'淡白舌',en:'Pale Tongue',q:'看到淡白舌，最可能对应哪种体质？',o:['实热体质，燥热内盛','气血两虚或阳虚寒证','湿热蕴结，舌苔厚腻','阴虚火旺，虚热内生'],a:1,ana:'把人体比作炉灶，淡白舌就是柴火不够、炉温偏低的信号，温煦推动能力下降。',ex:'常见症状：面色苍白、疲乏无力、畏寒肢冷、脉细无力。'}
+  ]},
+  2:{t:'舌苔辨证',q:[
+    {k:'white_coat',cn:'薄白苔',en:'Thin White',q:'这是薄白苔，隐约能看到舌质，属于什么状态？',o:['胃气正常，或外感初期','阳明热盛，邪热传里','湿热蕴结，苔腻如积粉','胃阴枯竭，无苔如镜'],a:0,ana:'薄白苔就像清晨凝结的薄霜——轻轻一吹就散，透明感强。身体底子是干净的，胃气正常。',ex:'薄白苔是正常苔象；外感风寒表证初期邪尚在表，苔仍薄白。'},
+    {k:'yellow_coat',cn:'黄苔',en:'Yellow Coat',q:'舌苔从白色变黄，说明发生了什么变化？',o:['寒邪入里，阳气受损','热证或病邪入里化热','气血不足，阴津亏损','外感表证，尚未化热'],a:1,ana:'就像白布被染了色：白苔是原色布，黄苔是被热气熏染之后的结果。苔色越黄，热邪越重。',ex:'黄苔是热证标志。淡黄→轻热；深黄/焦黄→热势较重。'},
+    {k:'thick_coat',cn:'厚白苔',en:'Thick Coat',q:'舌苔很厚实，完全遮盖了舌质，多提示什么？',o:['邪气入深，湿浊食积停滞','阴虚内热，肾水不足','气血两虚，正气亏损','表证初起，正邪交争'],a:0,ana:'把胃想象成一个房间：正常时干净整洁（薄苔）；积了很多杂物（食积、湿浊），就堆得满满（厚苔）。',ex:'厚苔主病邪较盛，或内有痰饮、食积、湿浊停聚，运化失司。'},
+    {k:'yellow_coat',cn:'黄腻苔',en:'Yellow Greasy',q:'黄苔且苔质油腻厚浊（黄腻苔），最典型对应哪种证型？',o:['寒湿证，寒邪困脾','湿热证，湿热交阻','血虚证，营血不足','肺气虚，卫表不固'],a:1,ana:'夏天厨房水槽：油渍（湿邪）遇上热水（热邪），产生黄色油腻污垢。湿与热胶着，既难清除又彼此催化。',ex:'黄腻苔是湿热证典型苔象。症状：口苦口黏、身热不扬、小便黄赤。'},
+    {k:'no_coat',cn:'镜面舌（无苔）',en:'Mirror Tongue',q:'舌面完全无苔，光滑如镜（镜面舌），说明什么？',o:['邪气化热，邪盛正旺','表证初起，正邪相当','胃气大伤、胃阴枯竭','脾胃湿热，运化受阻'],a:2,ana:'把胃气比作制造苔面的工厂——正常生产就有苔。镜面舌是工厂完全停产，连原材料都耗尽了。',ex:'镜面舌提示胃气大伤、胃阴枯竭，常见于重病后期或慢性消耗性疾病。'}
+  ]},
+  10:{t:'五色主病',q:[
+    {k:'face',cn:'正常面色',en:'Normal',q:'正常健康面色应该是什么样的？',o:['面色苍白，毫无光泽','面色红润有光泽（荣润）','面色晦暗，枯槁无神','面色发黄，萎黄无华'],a:1,ana:'就像浇水施肥充足的植物——叶子油亮有光泽，颜色饱满。荣润就是气血充盛的外在表现。',ex:'正常面色：红黄隐隐，明润含蓄，是气血充盛、精神内守的标志。'},
+    {k:'face',cn:'白色主病',en:'White',q:'面色发白（苍白）最主要反映哪类问题？',o:['湿热蕴结，肝胆有热','虚证（气血不足）或寒证','阴虚火旺，虚热内扰','血瘀气滞，经络不通'],a:1,ana:'就像关了暖气的房间，室温下降，墙壁变得冰冷苍白。面白就是热源不足、气血供应减少的信号。',ex:'白色主虚证、寒证。面色㿠白→阳虚寒凝；苍白突发→大出血或阳气暴脱。'},
+    {k:'face',cn:'红色主病',en:'Red',q:'面色持续异常红（非运动后）提示什么？',o:['气血充足，体质强健','热证（实热或虚热）','寒湿困脾，运化受阻','肾气不足，精气亏虚'],a:1,ana:'就像手机CPU过热——核心温度太高，散热口就会发红发烫。面部持续潮红是身体内部过热的外在表现。',ex:'红色主热证。满面通红→实热；午后颧红→阴虚虚热；久病面红如妆→虚阳外越危象。'},
+    {k:'face',cn:'黄色主病',en:'Yellow',q:'面色发黄（萎黄）最常见的原因是什么？',o:['热邪亢盛，内火旺盛','脾虚湿困或血虚','肾精亏损，髓海不足','肝气郁结，气机不畅'],a:1,ana:'就像土地过于潮湿板结——植物叶子就会变黄。脾虚湿盛，面色就像涝了的土地一样发黄。',ex:'黄色主脾虚、湿证。萎黄无泽→脾虚血少；黄而鲜明如橘→湿热（黄疸）；黄而晦暗→寒湿。'},
+    {k:'face',cn:'黑色主病',en:'Dark',q:'面色发黑（晦暗黧黑）提示哪类问题？',o:['外感风邪，表证初起','肾虚或寒凝、血瘀、水饮','湿热下注，膀胱有热','心火上炎，扰动心神'],a:1,ana:'就像长期没有阳光的阴暗角落，地面会变得潮湿发暗。面黑是肾阳不足或寒湿遮蔽气血的表现。',ex:'黑色主肾虚、寒凝、血瘀、水饮。眼眶发黑→肾虚或寒湿；面黑肌肤甲错→瘀血日久。'}
+  ]},
+  99:{t:'每日刷题',q:[]}
+};
+const KS=['A','B','C','D'];
+let G={xp:0,ul:[1,2,10],dn:[],cur:null,qi:0,co:0,st:0,ms:0,ans:false,cq:[]};
+function show(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('act'));document.getElementById(id).classList.add('act');}
+function stab(btn,tid){
+  document.querySelectorAll('.nbt').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  ['t0','t1','t2','t3'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  const el=document.getElementById(tid);if(el)el.style.display='block';
+}
+function otab(tid){
+  const m={t0:0,t1:1,t2:2,t3:3};
+  const bs=document.querySelectorAll('.nbt');
+  bs.forEach(b=>b.classList.remove('on'));
+  if(bs[m[tid]])bs[m[tid]].classList.add('on');
+  ['t0','t1','t2','t3'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  const el=document.getElementById(tid);if(el)el.style.display='block';
+}
+function uxp(){document.getElementById('xpd').textContent=G.xp+' XP';}
+function gh(){show('s0');ulv();}
+function ulv(){
+  [1,2,3,4].forEach(n=>{
+    const c=document.getElementById('lc'+n);const b=document.getElementById('lb'+n);
+    if(!c)return;
+    c.classList.remove('lk','dn');
+    if(G.dn.includes(n)){c.classList.add('dn');b.className='lvbg dn2';b.textContent='✓ 完成';}
+    else if(G.ul.includes(n)){b.className='lvbg op';b.textContent='开始';}
+    else{c.classList.add('lk');b.className='lvbg lk2';b.textContent='— 锁定';}
+  });
+  const d=G.dn.filter(n=>n<=4).length;
+  document.getElementById('gp').style.width=(d/12*100)+'%';
+  document.getElementById('gpl').textContent=d+' / 12 关';
+}
+function go(n){
+  if(!G.ul.includes(n)&&n!==99)return;
+  G.cur=n;G.qi=0;G.co=0;G.st=0;G.ms=0;G.ans=false;
+  let qs=[];
+  if(n===99){[1,2,10].forEach(k=>{if(DB[k])qs=qs.concat(DB[k].q);});qs=qs.sort(()=>Math.random()-.5).slice(0,5);}
+  else qs=(DB[n]&&DB[n].q)||[];
+  G.cq=qs;
+  document.getElementById('ltit').textContent=n===99?'每日刷题':(DB[n]?DB[n].t:'');
+  show('s1');rq();
+}
+function rq(){
+  const q=G.cq[G.qi];
+  document.getElementById('qpct').textContent=(G.qi+1)+' / '+G.cq.length;
+  document.getElementById('lp').style.width=((G.qi+1)/G.cq.length*100)+'%';
+  document.getElementById('tcn').textContent=q.cn;
+  document.getElementById('ten').textContent=q.en;
+  document.getElementById('tsvg').innerHTML=TV[q.k]||TV.normal;
+  document.getElementById('qtxt').textContent=q.q;
+  const o=document.getElementById('opts');o.innerHTML='';
+  q.o.forEach((opt,i)=>{
+    const b=document.createElement('button');b.className='obt';
+    b.innerHTML='<span class="okey">'+KS[i]+'</span><span>'+opt+'</span>';
+    b.onclick=function(){ans(i);};o.appendChild(b);
+  });
+  document.getElementById('kcd').classList.remove('sh');
+  document.getElementById('nxtbt').style.display='none';
+  G.ans=false;ups();
+}
+function ans(i){
+  if(G.ans)return;G.ans=true;
+  const q=G.cq[G.qi];const ok=i===q.a;
+  document.querySelectorAll('.obt').forEach(function(b,idx){
+    b.classList.add('ds');
+    if(idx===q.a)b.classList.add('ok');
+    else if(idx===i&&!ok)b.classList.add('er');
+  });
+  if(ok){G.co++;G.st++;G.ms=Math.max(G.ms,G.st);G.xp+=12;}
+  else G.st=0;
+  uxp();ups();
+  document.getElementById('kcd').classList.add('sh');
+  const kr=document.getElementById('krt');
+  if(ok){document.getElementById('kico').textContent='*';kr.textContent='答对了 +12 XP';kr.className='kcrt ok';}
+  else{document.getElementById('kico').textContent='x';kr.textContent='答错了，记住这个比喻';kr.className='kcrt er';}
+  document.getElementById('kana').textContent=q.ana;
+  document.getElementById('kex').textContent=q.ex;
+  document.getElementById('nxtbt').style.display='block';
+}
+function ups(){for(let i=0;i<5;i++){const p=document.getElementById('p'+i);if(p)p.className='pp'+(i<G.st?' on':'');}}
+function nq(){G.qi++;if(G.qi>=G.cq.length){cmp();return;}rq();}
+function cmp(){
+  const pct=G.co/G.cq.length;const stars=pct===1?3:pct>=.6?2:1;
+  const bon=stars===3?30:stars===2?20:10;G.xp+=bon;uxp();
+  const n=G.cur;
+  if(n!==99&&!G.dn.includes(n)){G.dn.push(n);if(n+1<=4&&!G.ul.includes(n+1))G.ul.push(n+1);}
+  [1,2,3].forEach(function(s){document.getElementById('s'+s+'b').className='stbx'+(s<=stars?' lt':'');});
+  document.getElementById('cmcn').textContent=(n===99?'每日刷题':(DB[n]?DB[n].t:''))+'· 完成';
+  document.getElementById('sco').textContent=G.co+'/'+G.cq.length;
+  document.getElementById('sxp').textContent=G.xp;
+  document.getElementById('sst').textContent=G.ms;
+  const tp=document.getElementById('trps');tp.innerHTML='';
+  if(pct===1)tp.innerHTML+='<div class="trp">* 完美答题</div>';
+  if(G.ms>=3)tp.innerHTML+='<div class="trp">* 连击高手</div>';
+  if(G.xp>=60)tp.innerHTML+='<div class="trp">* 积分达人</div>';
+  if(!tp.innerHTML)tp.innerHTML='<div class="trp">继续加油，下次更好</div>';
+  show('s2');
+}
+function rl(){go(G.cur);}
+ulv();
+</script>
